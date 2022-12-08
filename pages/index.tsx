@@ -3,11 +3,15 @@ import Layout from "../components/layout"
 import TaskCard from "../components/task-card"
 import useFolderStore from "../store/folder.store"
 import { v4 as uuidv4 } from "uuid"
+import BaseModal from "../components/base-modal"
 
 export default function Home() {
   return (
     <Layout>
       <div className="flex h-full w-full flex-col items-center rounded-md px-4 pt-4 pb-2 shadow">
+        <BaseModal title="Test Modal" isOpen={false} onClose={() => {}}>
+          <p className="">a</p>
+        </BaseModal>
         <div className="h-full overflow-y-auto pr-3">
           {/* <BreadCrumb
             className="mb-3 w-full text-sm"
