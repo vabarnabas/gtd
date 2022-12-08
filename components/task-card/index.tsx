@@ -92,7 +92,7 @@ export default function TaskCard() {
       <div className="mt-3 flex flex-wrap items-center justify-between gap-x-2 gap-y-2 text-sm">
         <div className="flex items-center gap-x-3">
           <button className="rounded-md bg-blue-500 px-2 py-1 text-white hover:bg-blue-600">
-            Open Task
+            Open
           </button>
           <p className="cursor-pointer text-blue-500 hover:text-blue-600">
             Create Subtask

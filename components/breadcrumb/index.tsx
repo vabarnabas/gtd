@@ -5,18 +5,17 @@ import { HiChevronRight } from "react-icons/hi"
 interface Props {
   path: {
     name: string
-    path?: string
+    id: string
+    path?: string | null
   }[]
   className?: string
 }
 
 export default function BreadCrumb({ path, className }: Props) {
-  console.log(path.length)
-
   return (
     <div className={clsx("flex items-center space-x-1", className)}>
       {path.map((item, idx) => (
-        <div key={item.name} className="flex items-center">
+        <div key={item.id} className="flex items-center">
           <p
             className={clsx("", {
               "cursor-pointer text-blue-500 hover:underline":
