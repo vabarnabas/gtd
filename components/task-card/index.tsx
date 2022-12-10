@@ -90,69 +90,69 @@ export default function TaskCard() {
         doloribus dicta iusto.
       </p>
       <div className="mt-3 flex flex-wrap items-center justify-between gap-x-2 gap-y-2 text-sm">
+        <button className="rounded-md bg-blue-500 px-2 py-1 text-white hover:bg-blue-600">
+          Open
+        </button>
         <div className="flex items-center gap-x-3">
-          <button className="rounded-md bg-blue-500 px-2 py-1 text-white hover:bg-blue-600">
-            Open
-          </button>
-          <p className="cursor-pointer text-blue-500 hover:text-blue-600">
+          {/* <p className="cursor-pointer text-blue-500 hover:text-blue-600">
             Create Subtask
-          </p>
-        </div>
-        <Listbox value={selected} onChange={setSelected}>
-          <div className="relative w-28 text-sm">
-            <Listbox.Button
-              className={clsx(
-                "cursor-pointers relative w-full rounded-md py-1 px-2 text-left font-medium focus:outline-none",
-                selected.bg,
-                selected.text
-              )}
-            >
-              <span className="flex items-center justify-between truncate">
-                {selected.name} <HiOutlineChevronDown />
-              </span>
-            </Listbox.Button>
-            <Transition
-              as={Fragment}
-              leave="transition ease-in duration-100"
-              leaveFrom="opacity-100"
-              leaveTo="opacity-0"
-            >
-              <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white p-1 py-1 text-xs shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                {itemStates.map((state, stateIdx) => (
-                  <Listbox.Option
-                    key={stateIdx}
-                    className={({ active }) =>
-                      clsx(
-                        "relative cursor-pointer select-none rounded-md py-1 px-1",
-                        active ? state.bg : null,
-                        active ? state.text : null
-                      )
-                    }
-                    value={state}
-                  >
-                    {({ selected }) => (
-                      <>
-                        <span
-                          className={`block truncate ${
-                            selected ? "font-medium" : "font-normal"
-                          }`}
-                        >
-                          {state.name}
-                        </span>
-                        {selected ? (
-                          <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-600">
-                            {/* <CheckIcon className="h-5 w-5" aria-hidden="true" /> */}
+          </p> */}
+          <Listbox value={selected} onChange={setSelected}>
+            <div className="relative w-28 text-sm">
+              <Listbox.Button
+                className={clsx(
+                  "cursor-pointers relative w-full rounded-md py-1 px-2 text-left font-medium focus:outline-none",
+                  selected.bg,
+                  selected.text
+                )}
+              >
+                <span className="flex items-center justify-between truncate">
+                  {selected.name} <HiOutlineChevronDown />
+                </span>
+              </Listbox.Button>
+              <Transition
+                as={Fragment}
+                leave="transition ease-in duration-100"
+                leaveFrom="opacity-100"
+                leaveTo="opacity-0"
+              >
+                <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white p-1 py-1 text-xs shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                  {itemStates.map((state, stateIdx) => (
+                    <Listbox.Option
+                      key={stateIdx}
+                      className={({ active }) =>
+                        clsx(
+                          "relative cursor-pointer select-none rounded-md py-1 px-1",
+                          active ? state.bg : null,
+                          active ? state.text : null
+                        )
+                      }
+                      value={state}
+                    >
+                      {({ selected }) => (
+                        <>
+                          <span
+                            className={`block truncate ${
+                              selected ? "font-medium" : "font-normal"
+                            }`}
+                          >
+                            {state.name}
                           </span>
-                        ) : null}
-                      </>
-                    )}
-                  </Listbox.Option>
-                ))}
-              </Listbox.Options>
-            </Transition>
-          </div>
-        </Listbox>
-        {/* <input className="ml-auto aspect-square w-6 rounded-md bg-gray-100 text-center text-xs" /> */}
+                          {selected ? (
+                            <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-600">
+                              {/* <CheckIcon className="h-5 w-5" aria-hidden="true" /> */}
+                            </span>
+                          ) : null}
+                        </>
+                      )}
+                    </Listbox.Option>
+                  ))}
+                </Listbox.Options>
+              </Transition>
+            </div>
+          </Listbox>
+          {/* <input className="ml-auto aspect-square w-6 rounded-md bg-gray-100 text-center text-xs" /> */}
+        </div>
       </div>
     </div>
   )

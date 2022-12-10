@@ -22,7 +22,7 @@ a {
 .grid-container {
   width: 100wv;
   height: 100vh;
-  background-size: 70px 70px;
+  /* background-size: 70px 70px;
   background-image: linear-gradient(to right, #e5e7eb 1px, transparent 1px),
-    linear-gradient(to bottom, #e5e7eb 1px, transparent 1px);
+    linear-gradient(to bottom, #e5e7eb 1px, transparent 1px); */
 }
