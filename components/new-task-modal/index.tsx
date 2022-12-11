@@ -272,7 +272,7 @@ export default function NewTaskModal({ isOpen, className, fetchTasks }: Props) {
             </div>
 
             <button className="w-full rounded-md bg-blue-500 px-2 py-1 text-white hover:bg-blue-600">
-              Open
+              Create
             </button>
           </form>
         </FormProvider>

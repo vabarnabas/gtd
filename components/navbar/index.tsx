@@ -25,7 +25,9 @@ export default function Navbar() {
     },
     {
       title: "Change Password",
-      action: () => {},
+      action: () => {
+        openModal({ modal: "change-password" })
+      },
     },
     {
       title: "Logout",

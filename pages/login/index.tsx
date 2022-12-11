@@ -3,6 +3,8 @@ import { useRouter } from "next/router"
 import React, { useState } from "react"
 import { FormProvider, useForm } from "react-hook-form"
 import { z } from "zod"
+import Toast from "../../components/toast"
+import ToastHandler from "../../components/toast/toast-handler"
 import { makeRequest } from "../../services/makeRequest"
 import { requestHelper } from "../../services/requestHelper"
 import TokenService from "../../services/token.service"
@@ -55,6 +57,7 @@ export default function Login() {
 
   return (
     <div className="flex h-screen w-screen select-none items-center justify-center bg-white text-slate-700">
+      <ToastHandler position="topRight" toastComponent={Toast} />
       <FormProvider {...form}>
         <form onSubmit={onSubmit} className="space-y-3">
           <p className="text-2xl font-bold">Login</p>

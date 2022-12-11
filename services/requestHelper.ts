@@ -116,4 +116,16 @@ export const requestHelper = {
 
     return response
   },
+  async changePassword(oldPassword: string, password: string): Promise<User> {
+    const response = await makeRequest("POST", {
+      baseUrl: process.env.NEXT_PUBLIC_API_URL as string,
+      path: "auth/local/changepassword",
+      token: await this.getToken(),
+      body: JSON.stringify({ oldPassword, password }),
+    })
+
+    if (response?.statusCode) throw new Error()
+
+    return response
+  },
 }

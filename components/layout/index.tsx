@@ -1,5 +1,6 @@
 import Head from "next/head"
 import useModalStore from "../../store/modal.store"
+import ChangePasswordModal from "../change-password-modal"
 import Navbar from "../navbar"
 import NewTaskModal from "../new-task-modal"
 import Toast from "../toast"
@@ -25,6 +26,7 @@ export default function Layout({ children, fetchTasks }: Props) {
       <Navbar />
       <ToastHandler position="topRight" toastComponent={Toast} />
       <div className="h-full w-full pt-12">{children}</div>
+      <ChangePasswordModal isOpen={currentModal.modal === "change-password"} />
       <NewTaskModal
         fetchTasks={fetchTasks && fetchTasks}
         isOpen={currentModal.modal === "new-task"}
