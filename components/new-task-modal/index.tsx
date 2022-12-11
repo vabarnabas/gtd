@@ -8,6 +8,7 @@ import clsx from "clsx"
 import { HiOutlineChevronDown } from "react-icons/hi"
 import { makeRequest } from "../../services/makeRequest"
 import { Task } from "../../types/prisma.types"
+import TokenService from "../../services/token.service"
 
 interface Props {
   isOpen: boolean
@@ -41,6 +42,7 @@ export default function NewTaskModal({ isOpen, onClose, className }: Props) {
   ]
 
   const [selected, setSelected] = useState(itemStates[0])
+  const tokenservice = new TokenService()
 
   const defaultValues: FormValues = {
     title: "",
@@ -66,13 +68,15 @@ export default function NewTaskModal({ isOpen, onClose, className }: Props) {
   } = form
   const onSubmit = handleSubmit((data) => createTask(data as Task))
 
-  const createTask = (data: Task) => {
-    makeRequest("POST", {
+  const createTask = async (data: Task) => {
+    await makeRequest("POST", {
       baseUrl: process.env.NEXT_PUBLIC_API_URL as string,
       path: "tasks",
-      body: JSON.stringify(data),
-      token:
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijc0MmVjOWMwLTNmMWYtNDJmNi05NjViLTY5Mzc3Y2QxY2UyZiIsImlkZW50aWZpZXIiOiJzdXBlcmFkbWluQHJvc3p0aS5jb20iLCJ1c2VyTmFtZSI6IlN1cGVyIEFkbWluIiwiaWF0IjoxNjcwNjg3ODQ2LCJleHAiOjE2NzA2OTE0NDZ9.KkG3kuP_qjFeFhxnDtnmB3au5c-IPBmiDhwwznxi5-A",
+      body: JSON.stringify({
+        ...data,
+        userId: "742ec9c0-3f1f-42f6-965b-69377cd1ce2f",
+      }),
+      token: await tokenservice.getToken(),
     })
   }
 

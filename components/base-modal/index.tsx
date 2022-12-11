@@ -18,7 +18,6 @@ export default function BaseModal({
 }: Props) {
   return (
     <>
-      <div className="fixed inset-0 flex items-center justify-center"></div>
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog
           as="div"

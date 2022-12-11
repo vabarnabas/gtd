@@ -5,9 +5,13 @@ import { BiDotsVerticalRounded } from "react-icons/bi"
 import { HiOutlineChevronDown } from "react-icons/hi"
 import { Task } from "../../types/task.types"
 
-interface Props extends Task {}
+interface Props {
+  title: string
+  description: string
+  status: string
+}
 
-export default function TaskCard() {
+export default function TaskCard({ title, description, status }: Props) {
   const menuItems = [
     {
       title: "Subtasks",
@@ -45,13 +49,15 @@ export default function TaskCard() {
     },
   ]
 
-  const [selected, setSelected] = useState(itemStates[0])
+  const [selected, setSelected] = useState(
+    itemStates.find((state) => state.name === status) || itemStates[0]
+  )
 
   return (
-    <div className="relative h-max max-w-sm rounded-lg bg-white p-4 shadow-md">
+    <div className="relative h-max w-full rounded-lg bg-white p-4 shadow-md">
       <Menu as="div" className="">
         <div className="relative flex items-center justify-between">
-          <p className="text-lg font-bold">Task Name</p>
+          <p className="text-lg font-bold">{title}</p>
           <Menu.Button>
             <BiDotsVerticalRounded className=" cursor-pointer" />
           </Menu.Button>
@@ -83,12 +89,7 @@ export default function TaskCard() {
           </Transition>
         </div>
       </Menu>
-      <p className="mt-3 text-sm">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint ullam,
-        doloribus aperiam earum exercitationem est labore provident quae,
-        reiciendis minima nulla. Consectetur sapiente suscipit, ab a excepturi
-        doloribus dicta iusto.
-      </p>
+      <p className="mt-3 min-h-[100px] min-w-full text-sm">{description}</p>
       <div className="mt-3 flex flex-wrap items-center justify-between gap-x-2 gap-y-2 text-sm">
         <button className="rounded-md bg-blue-500 px-2 py-1 text-white hover:bg-blue-600">
           Open
