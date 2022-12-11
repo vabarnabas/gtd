@@ -1,9 +1,12 @@
 import { Listbox, Menu, Transition } from "@headlessui/react"
 import clsx from "clsx"
+import { useRouter } from "next/router"
 import { Fragment, useEffect, useState } from "react"
 import { BiDotsVerticalRounded } from "react-icons/bi"
 import { HiOutlineChevronDown } from "react-icons/hi"
+import { useToast } from "../../providers/toast.provider"
 import { requestHelper } from "../../services/requestHelper"
+import TokenService from "../../services/token.service"
 import { Task } from "../../types/prisma.types"
 
 interface Props {
@@ -21,6 +24,8 @@ export default function TaskCard({
   status,
   fetchTasks,
 }: Props) {
+  const { createToast } = useToast()
+
   const menuItems = [
     {
       title: "Subtasks",
@@ -34,16 +39,12 @@ export default function TaskCard({
       title: "Change Folder",
       action: () => {},
     },
-    {
-      title: "Delete",
-      action: () => {},
-    },
   ]
 
   const itemStates = [
     {
       name: "To Do",
-      className: "bg-gray-200 text-gray-600",
+      className: "bg-gray-100 text-gray-500",
     },
     {
       name: "In Progress",
@@ -102,7 +103,7 @@ export default function TaskCard({
       <p className="mt-3 h-20 min-w-full overflow-y-auto text-sm">
         {description}
       </p>
-      <div className="mt-3 flex flex-wrap items-center justify-between gap-x-2 gap-y-2 text-sm">
+      <div className="mt-4 flex flex-wrap items-center justify-between gap-x-2 gap-y-2 text-sm">
         <button className="rounded-md bg-blue-500 px-2 py-1 text-white hover:bg-blue-600">
           Open
         </button>
@@ -113,9 +114,23 @@ export default function TaskCard({
           <Listbox
             value={selected}
             onChange={async (e) => {
-              setSelected(e)
-              await requestHelper.update<Task>("tasks", { status: e.name }, id)
-              fetchTasks && fetchTasks()
+              try {
+                await requestHelper.update<Task>(
+                  "tasks",
+                  { status: e.name },
+                  id
+                )
+                setSelected(e)
+                fetchTasks && fetchTasks()
+              } catch {
+                createToast({
+                  title: "Something went wrong.",
+                  subtitle:
+                    "Something went wrong on our end, please try again.",
+                  expiration: 10000,
+                  type: "error",
+                })
+              }
             }}
           >
             <div className="relative w-28 text-sm">
@@ -135,7 +150,7 @@ export default function TaskCard({
                 leaveFrom="opacity-100"
                 leaveTo="opacity-0"
               >
-                <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white p-1 py-1 text-xs shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white p-1 py-1 text-sm shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
                   {itemStates.map((state, stateIdx) => (
                     <Listbox.Option
                       key={stateIdx}

@@ -41,6 +41,17 @@ export const requestHelper = {
 
     return response
   },
+  async getMy<T extends RequestTypes>(route: Route): Promise<T[]> {
+    const response = await makeRequest("POST", {
+      baseUrl: process.env.NEXT_PUBLIC_API_URL as string,
+      path: `${route}/my`,
+      token: await this.getToken(),
+    })
+
+    if (response?.statusCode) throw new Error()
+
+    return response
+  },
   async create<T extends RequestTypes>(
     route: Route,
     input: Omit<T, "id">
@@ -88,6 +99,17 @@ export const requestHelper = {
       baseUrl: process.env.NEXT_PUBLIC_API_URL as string,
       path: "auth/local/signin",
       body: JSON.stringify({ identifier, password }),
+    })
+
+    if (response?.statusCode) throw new Error()
+
+    return response
+  },
+  async currentUser(): Promise<User> {
+    const response = await makeRequest("GET", {
+      baseUrl: process.env.NEXT_PUBLIC_API_URL as string,
+      path: "auth/current",
+      token: await this.getToken(),
     })
 
     if (response?.statusCode) throw new Error()
