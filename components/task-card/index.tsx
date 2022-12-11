@@ -3,7 +3,6 @@ import clsx from "clsx"
 import { Fragment, useState } from "react"
 import { BiDotsVerticalRounded } from "react-icons/bi"
 import { HiOutlineChevronDown } from "react-icons/hi"
-import { Task } from "../../types/task.types"
 
 interface Props {
   title: string

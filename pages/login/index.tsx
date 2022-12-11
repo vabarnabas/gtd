@@ -4,6 +4,7 @@ import React, { useState } from "react"
 import { FormProvider, useForm } from "react-hook-form"
 import { z } from "zod"
 import { makeRequest } from "../../services/makeRequest"
+import { requestHelper } from "../../services/requestHelper"
 import TokenService from "../../services/token.service"
 
 interface FormValues {
@@ -42,16 +43,12 @@ export default function Login() {
 
   const login = async (data: FormValues) => {
     setError("")
-    const response = await makeRequest("POST", {
-      baseUrl: process.env.NEXT_PUBLIC_API_URL as string,
-      path: "auth/local/signin",
-      body: JSON.stringify({ identifier: data.email, password: data.password }),
-    })
+    try {
+      const token = await requestHelper.login(data.email, data.password)
+      tokenservice.saveToken(token.access_token)
 
-    if (response?.access_token) {
-      await tokenservice.saveToken(response.access_token)
       router.push("/")
-    } else {
+    } catch {
       setError("Invalid Credentials")
     }
   }

@@ -1,6 +1,4 @@
-import { Folder } from "../types/folder.types"
 import create from "zustand"
-import { persist } from "zustand/middleware"
 
 interface ModalStore {
   currentModal: string
