@@ -27,16 +27,17 @@ export const FolderHelper = {
         input.filter((subCategory) => subCategory.id === id)[0].parentId
     )[0]
   },
-  findDeepParents(input: Folder[], id: string): Folder[] {
+  findDeepParents(input: Folder[], id: string) {
     const parents: Folder[] = []
 
     if (!this.isTopLevel(input, id)) {
       parents.push(this.findParent(input, id))
-      parents.forEach((parent) => {
-        if (!this.isTopLevel(input, parent.id)) {
-          parents.push(this.findParent(input, parent.id))
+
+      while (!this.isTopLevel(input, parents[parents.length - 1].id)) {
+        if (!this.isTopLevel(input, parents[parents.length - 1].id)) {
+          parents.push(this.findParent(input, parents[parents.length - 1].id))
         }
-      })
+      }
     }
 
     return parents

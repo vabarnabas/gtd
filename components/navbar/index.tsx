@@ -20,8 +20,10 @@ export default function Navbar() {
       },
     },
     {
-      title: "Folders",
-      action: () => {},
+      title: "New Folder",
+      action: () => {
+        openModal({ modal: "new-folder" })
+      },
     },
     {
       title: "Change Password",

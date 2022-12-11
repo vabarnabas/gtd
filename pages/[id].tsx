@@ -49,6 +49,8 @@ export default function Home() {
     fetchTasks()
   }, [])
 
+  console.log(folders.length !== 0 && FolderHelper.findDeepParents(folders, id))
+
   return (
     <Layout fetchTasks={fetchTasks}>
       <div className="flex h-full w-full flex-col items-center rounded-md px-4 pt-4 pb-2 shadow">

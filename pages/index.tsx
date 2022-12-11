@@ -32,7 +32,7 @@ export default function Home() {
   }, [])
 
   return (
-    <Layout>
+    <Layout fetchFolders={fetchFolders}>
       <div className="flex h-full w-full flex-col items-center rounded-md px-4 pt-4 pb-2 shadow">
         {folders.length !== 0 ? (
           <div className="w-full rounded-md bg-white p-4 shadow-md">

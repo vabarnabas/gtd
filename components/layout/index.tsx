@@ -2,6 +2,7 @@ import Head from "next/head"
 import useModalStore from "../../store/modal.store"
 import ChangePasswordModal from "../change-password-modal"
 import Navbar from "../navbar"
+import NewFolderModal from "../new-folder-modal"
 import NewTaskModal from "../new-task-modal"
 import Toast from "../toast"
 import ToastHandler from "../toast/toast-handler"
@@ -9,9 +10,10 @@ import ToastHandler from "../toast/toast-handler"
 interface Props {
   children: JSX.Element
   fetchTasks?: () => void
+  fetchFolders?: () => void
 }
 
-export default function Layout({ children, fetchTasks }: Props) {
+export default function Layout({ children, fetchTasks, fetchFolders }: Props) {
   const currentModal = useModalStore((state) => state.currentModal)
   const closeModal = useModalStore((state) => state.closeModal)
 
@@ -27,10 +29,18 @@ export default function Layout({ children, fetchTasks }: Props) {
       <ToastHandler position="topRight" toastComponent={Toast} />
       <div className="h-full w-full pt-12">{children}</div>
       <ChangePasswordModal isOpen={currentModal.modal === "change-password"} />
-      <NewTaskModal
-        fetchTasks={fetchTasks && fetchTasks}
-        isOpen={currentModal.modal === "new-task"}
-      />
+      {currentModal.modal === "new-task" ? (
+        <NewTaskModal
+          fetchTasks={fetchTasks && fetchTasks}
+          isOpen={currentModal.modal === "new-task"}
+        />
+      ) : null}
+      {currentModal.modal === "new-folder" ? (
+        <NewFolderModal
+          fetchFolders={fetchFolders && fetchFolders}
+          isOpen={currentModal.modal === "new-folder"}
+        />
+      ) : null}
     </div>
   )
 }

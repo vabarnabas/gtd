@@ -3,6 +3,7 @@ import { useRouter } from "next/router"
 import React from "react"
 import { HiChevronRight } from "react-icons/hi"
 import { FaHome } from "react-icons/fa"
+import { FolderHelper } from "../../helpers/FolderHelper"
 
 interface Props {
   path: {

@@ -46,7 +46,7 @@ export default function BaseModal({
                 <Dialog.Title className="text mb-3 text-lg font-bold">
                   {title}
                 </Dialog.Title>
-                <div className="flex h-full min-h-[180px] w-full items-center justify-center text-gray-700">
+                <div className="flex h-full min-h-[80px] w-full items-center justify-center text-gray-700">
                   {children}
                 </div>
               </Dialog.Panel>
