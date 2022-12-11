@@ -14,10 +14,7 @@ export default function Layout({ children }: Props) {
     <div className="h-screen w-screen select-none bg-gray-100 text-slate-700">
       <Navbar />
       <div className="h-full w-full pt-12">{children}</div>
-      <NewTaskModal
-        isOpen={currentModal === "new-task"}
-        onClose={() => closeModal()}
-      />
+      <NewTaskModal isOpen={currentModal === "new-task"} />
     </div>
   )
 }

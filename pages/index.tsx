@@ -23,8 +23,6 @@ export default function Home() {
     getData()
   }, [])
 
-  console.log(tasks)
-
   return (
     <Layout>
       <div className="flex h-full w-full flex-col items-center rounded-md px-4 pt-4 pb-2 shadow">

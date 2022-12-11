@@ -9,10 +9,10 @@ import { HiOutlineChevronDown } from "react-icons/hi"
 import { makeRequest } from "../../services/makeRequest"
 import { Task } from "../../types/prisma.types"
 import TokenService from "../../services/token.service"
+import useModalStore from "../../store/modal.store"
 
 interface Props {
   isOpen: boolean
-  onClose: () => void
   className?: string
 }
 
@@ -22,7 +22,8 @@ interface FormValues {
   status: string
 }
 
-export default function NewTaskModal({ isOpen, onClose, className }: Props) {
+export default function NewTaskModal({ isOpen, className }: Props) {
+  const closeModal = useModalStore((state) => state.closeModal)
   const itemStates = [
     {
       name: "To Do",
@@ -78,10 +79,11 @@ export default function NewTaskModal({ isOpen, onClose, className }: Props) {
       }),
       token: await tokenservice.getToken(),
     })
+    closeModal()
   }
 
   return (
-    <BaseModal title="Create New Task" isOpen={isOpen} onClose={onClose}>
+    <BaseModal title="Create New Task" isOpen={isOpen} onClose={closeModal}>
       <FormProvider {...form}>
         <form className="space-y-3" onSubmit={onSubmit}>
           <div className="">
@@ -134,7 +136,7 @@ export default function NewTaskModal({ isOpen, onClose, className }: Props) {
                   leaveFrom="opacity-100"
                   leaveTo="opacity-0"
                 >
-                  <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white p-1 py-1 text-xs shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                  <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white p-1 py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
                     {itemStates.map((state, stateIdx) => (
                       <Listbox.Option
                         key={stateIdx}

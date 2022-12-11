@@ -70,7 +70,7 @@ export default function TaskCard({ title, description, status }: Props) {
             leaveFrom="transform opacity-100 scale-100"
             leaveTo="transform opacity-0 scale-95"
           >
-            <Menu.Items className="absolute top-0 right-0 mt-6 w-32 rounded-md border border-gray-100 bg-white p-1 shadow-md">
+            <Menu.Items className="absolute top-0 right-0 z-10 mt-6 w-32 rounded-md border border-gray-100 bg-white p-1 shadow-md">
               {menuItems.map((item) => (
                 <Menu.Item key={item.title}>
                   {({ active }) => (
@@ -89,7 +89,9 @@ export default function TaskCard({ title, description, status }: Props) {
           </Transition>
         </div>
       </Menu>
-      <p className="mt-3 min-h-[100px] min-w-full text-sm">{description}</p>
+      <p className="mt-3 h-20 min-w-full overflow-y-auto text-sm">
+        {description}
+      </p>
       <div className="mt-3 flex flex-wrap items-center justify-between gap-x-2 gap-y-2 text-sm">
         <button className="rounded-md bg-blue-500 px-2 py-1 text-white hover:bg-blue-600">
           Open
