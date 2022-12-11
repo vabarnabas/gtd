@@ -1,11 +1,11 @@
-import { Folder } from "../types/folder.types"
+import { Folder } from "../types/prisma.types"
 
 export const FolderHelper = {
   isTopLevel(input: Folder[], id: string): boolean {
-    return input.find((folder) => folder.id === id)?.parentFolderId === null
+    return input.find((folder) => folder.id === id)?.parentId === null
   },
   hasChildren(input: Folder[], id: string): boolean {
-    return input.filter((folder) => folder.parentFolderId === id).length > 0
+    return input.filter((folder) => folder.parentId === id).length > 0
   },
   isSame(input: Folder, id: string): boolean {
     return input.id === id
@@ -24,7 +24,7 @@ export const FolderHelper = {
     return input.filter(
       (folder) =>
         folder.id ===
-        input.filter((subCategory) => subCategory.id === id)[0].parentFolderId
+        input.filter((subCategory) => subCategory.id === id)[0].parentId
     )[0]
   },
   findDeepParents(input: Folder[], id: string): Folder[] {
@@ -42,10 +42,10 @@ export const FolderHelper = {
     return parents
   },
   findTopLevel(input: Folder[]): Folder[] {
-    return input.filter((category) => category.parentFolderId === null)
+    return input.filter((category) => category.parentId === null)
   },
   findChildren(input: Folder[], id: string): Folder[] {
-    return input.filter((category) => category.parentFolderId === id)
+    return input.filter((category) => category.parentId === id)
   },
   findDeepChildren(input: Folder[], id: string): Folder[] {
     const children: Folder[] = []

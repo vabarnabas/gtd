@@ -1,16 +1,20 @@
 import { Listbox, Menu, Transition } from "@headlessui/react"
 import clsx from "clsx"
-import { Fragment, useState } from "react"
+import { Fragment, useEffect, useState } from "react"
 import { BiDotsVerticalRounded } from "react-icons/bi"
 import { HiOutlineChevronDown } from "react-icons/hi"
+import { itemStates } from "../../data/itemStates"
+import { requestHelper } from "../../services/requestHelper"
+import { Task } from "../../types/prisma.types"
 
 interface Props {
+  id: string
   title: string
   description: string
   status: string
 }
 
-export default function TaskCard({ title, description, status }: Props) {
+export default function TaskCard({ id, title, description, status }: Props) {
   const menuItems = [
     {
       title: "Subtasks",
@@ -27,24 +31,6 @@ export default function TaskCard({ title, description, status }: Props) {
     {
       title: "Delete",
       action: () => {},
-    },
-  ]
-
-  const itemStates = [
-    {
-      name: "To Do",
-      bg: "bg-gray-200",
-      text: "text-gray-600",
-    },
-    {
-      name: "In Progress",
-      bg: "bg-blue-100",
-      text: "text-blue-500",
-    },
-    {
-      name: "Done",
-      bg: "bg-green-100",
-      text: "text-green-500",
     },
   ]
 
@@ -99,13 +85,18 @@ export default function TaskCard({ title, description, status }: Props) {
           {/* <p className="cursor-pointer text-blue-500 hover:text-blue-600">
             Create Subtask
           </p> */}
-          <Listbox value={selected} onChange={setSelected}>
+          <Listbox
+            value={selected}
+            onChange={async (e) => {
+              setSelected(e)
+              await requestHelper.update<Task>("tasks", { status: e.name }, id)
+            }}
+          >
             <div className="relative w-28 text-sm">
               <Listbox.Button
                 className={clsx(
                   "cursor-pointers relative w-full rounded-md py-1 px-2 text-left font-medium focus:outline-none",
-                  selected.bg,
-                  selected.text
+                  selected.className
                 )}
               >
                 <span className="flex items-center justify-between truncate">
@@ -125,8 +116,7 @@ export default function TaskCard({ title, description, status }: Props) {
                       className={({ active }) =>
                         clsx(
                           "relative cursor-pointer select-none rounded-md py-1 px-1",
-                          active ? state.bg : null,
-                          active ? state.text : null
+                          active ? state.className : null
                         )
                       }
                       value={state}

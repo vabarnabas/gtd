@@ -10,6 +10,7 @@ import { makeRequest } from "../../services/makeRequest"
 import { Task } from "../../types/prisma.types"
 import TokenService from "../../services/token.service"
 import useModalStore from "../../store/modal.store"
+import { itemStates } from "../../data/itemStates"
 
 interface Props {
   isOpen: boolean
@@ -24,23 +25,6 @@ interface FormValues {
 
 export default function NewTaskModal({ isOpen, className }: Props) {
   const closeModal = useModalStore((state) => state.closeModal)
-  const itemStates = [
-    {
-      name: "To Do",
-      bg: "bg-gray-200",
-      text: "text-gray-600",
-    },
-    {
-      name: "In Progress",
-      bg: "bg-blue-100",
-      text: "text-blue-500",
-    },
-    {
-      name: "Done",
-      bg: "bg-green-100",
-      text: "text-green-500",
-    },
-  ]
 
   const [selected, setSelected] = useState(itemStates[0])
   const tokenservice = new TokenService()
@@ -122,8 +106,7 @@ export default function NewTaskModal({ isOpen, className }: Props) {
                 <Listbox.Button
                   className={clsx(
                     "cursor-pointers relative w-full rounded-md py-1 px-3 text-left focus:outline-none",
-                    selected.bg,
-                    selected.text
+                    selected.className
                   )}
                 >
                   <span className="flex items-center justify-between truncate">
@@ -143,8 +126,7 @@ export default function NewTaskModal({ isOpen, className }: Props) {
                         className={({ active }) =>
                           clsx(
                             "relative cursor-pointer select-none rounded-md py-1 px-1",
-                            active ? state.bg : null,
-                            active ? state.text : null
+                            active ? state.className : null
                           )
                         }
                         value={state}

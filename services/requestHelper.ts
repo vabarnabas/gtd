@@ -58,11 +58,12 @@ export const requestHelper = {
   },
   async update<T extends RequestTypes>(
     route: Route,
-    input: Partial<T>
+    input: Partial<Omit<T, "id">>,
+    id: string
   ): Promise<T> {
     const response = await makeRequest("PATCH", {
       baseUrl: process.env.NEXT_PUBLIC_API_URL as string,
-      path: `${route}/${input.id}`,
+      path: `${route}/${id}`,
       token: await this.getToken(),
       body: JSON.stringify(input),
     })

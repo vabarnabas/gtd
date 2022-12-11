@@ -35,4 +35,5 @@ export type Folder = {
   title: string
   createdAt: Date
   userId: string
+  parentId: string | null
 }
