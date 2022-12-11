@@ -46,7 +46,7 @@ export default function Navbar() {
         onClick={() => router.push("/")}
         className="cursor-pointer font-medium"
       >
-        GettingThing<span className="inline text-blue-500">Done</span>
+        GettingThings<span className="inline text-blue-500">Done</span>
       </div>
       <Menu as="div" className="">
         <div className="relative flex items-center justify-between">
