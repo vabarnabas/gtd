@@ -169,7 +169,7 @@ export default function NewTaskModal({ isOpen, className, fetchTasks }: Props) {
                     leaveFrom="opacity-100"
                     leaveTo="opacity-0"
                   >
-                    <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white p-1 py-1 text-gray-500 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                    <Listbox.Options className="absolute z-10 mt-1 max-h-40 w-full overflow-auto rounded-md bg-white p-1 py-1 text-sm text-gray-500 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                       {folders.map((folder, stateIdx) => (
                         <Listbox.Option
                           key={stateIdx}

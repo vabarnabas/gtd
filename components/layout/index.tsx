@@ -28,7 +28,11 @@ export default function Layout({ children, fetchTasks, fetchFolders }: Props) {
       <Navbar />
       <ToastHandler position="topRight" toastComponent={Toast} />
       <div className="h-full w-full pt-12">{children}</div>
-      <ChangePasswordModal isOpen={currentModal.modal === "change-password"} />
+      {currentModal.modal === "change-password" ? (
+        <ChangePasswordModal
+          isOpen={currentModal.modal === "change-password"}
+        />
+      ) : null}
       {currentModal.modal === "new-task" ? (
         <NewTaskModal
           fetchTasks={fetchTasks && fetchTasks}
