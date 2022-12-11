@@ -2,6 +2,7 @@ import clsx from "clsx"
 import { useRouter } from "next/router"
 import React from "react"
 import { HiChevronRight } from "react-icons/hi"
+import { FaHome } from "react-icons/fa"
 
 interface Props {
   path: {
@@ -18,6 +19,10 @@ export default function BreadCrumb({ path, className }: Props) {
     <div
       className={clsx("flex w-full items-center space-x-1 text-sm", className)}
     >
+      <div className="flex items-center text-blue-500">
+        <FaHome className="cursor-pointer" onClick={() => router.push("/")} />
+        <HiChevronRight className="ml-2" />
+      </div>
       {path.map((item, idx) => (
         <div
           onClick={() => item.path && router.push(item.path)}
