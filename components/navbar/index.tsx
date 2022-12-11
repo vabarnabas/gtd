@@ -42,8 +42,11 @@ export default function Navbar() {
 
   return (
     <div className="fixed inset-x-0 top-0 z-10 flex h-12 items-center justify-between rounded-b-md bg-white px-6 shadow">
-      <div className="font-medium">
-        Test<span className="inset text-blue-500">Project</span>
+      <div
+        onClick={() => router.push("/")}
+        className="cursor-pointer font-medium"
+      >
+        GettingThing<span className="inline text-blue-500">Done</span>
       </div>
       <Menu as="div" className="">
         <div className="relative flex items-center justify-between">
