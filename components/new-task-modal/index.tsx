@@ -93,7 +93,11 @@ export default function NewTaskModal({ isOpen, className, fetchTasks }: Props) {
     try {
       const user = await requestHelper.currentUser()
 
-      await requestHelper.create<Task>("tasks", { ...data, userId: user.id })
+      await requestHelper.create<Task>("tasks", {
+        ...data,
+        userId: user.id,
+        folderId: selectedFolder.id,
+      })
       fetchTasks && (await fetchTasks())
       closeModal()
       createToast({

@@ -2,7 +2,7 @@ import { Folder } from "../types/prisma.types"
 
 export const FolderHelper = {
   isTopLevel(input: Folder[], id: string): boolean {
-    return input.find((folder) => folder.id === id)?.parentId === null
+    return input.filter((folder) => folder.id === id)[0]?.parentId === null
   },
   hasChildren(input: Folder[], id: string): boolean {
     return input.filter((folder) => folder.parentId === id).length > 0
