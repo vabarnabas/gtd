@@ -4,6 +4,7 @@ import React from "react"
 import { HiChevronRight } from "react-icons/hi"
 import { FaHome } from "react-icons/fa"
 import { FolderHelper } from "../../helpers/FolderHelper"
+import ScrollContainer from "react-indiana-drag-scroll"
 
 interface Props {
   path: {
@@ -17,7 +18,7 @@ export default function BreadCrumb({ path, className }: Props) {
   const router = useRouter()
 
   return (
-    <div
+    <ScrollContainer
       className={clsx("flex w-full items-center space-x-1 text-sm", className)}
     >
       <div className="flex items-center text-blue-500">
@@ -44,6 +45,6 @@ export default function BreadCrumb({ path, className }: Props) {
           ) : null}
         </div>
       ))}
-    </div>
+    </ScrollContainer>
   )
 }

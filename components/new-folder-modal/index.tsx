@@ -6,8 +6,7 @@ import BaseModal from "../base-modal"
 import { Listbox, Transition } from "@headlessui/react"
 import clsx from "clsx"
 import { HiOutlineChevronDown } from "react-icons/hi"
-import { Folder, Task } from "../../types/prisma.types"
-import TokenService from "../../services/token.service"
+import { Folder } from "../../types/prisma.types"
 import useModalStore from "../../store/modal.store"
 import { requestHelper } from "../../services/requestHelper"
 import { useToast } from "../../providers/toast.provider"
@@ -32,13 +31,15 @@ export default function NewFolderModal({
   const closeModal = useModalStore((state) => state.closeModal)
 
   const [folders, setFolders] = useState<Folder[]>([])
-  const [selectedFolder, setSelectedFolder] = useState<Folder>({} as Folder)
+  const [selectedFolder, setSelectedFolder] = useState({
+    id: null,
+    title: "No Parent",
+  })
   const { createToast } = useToast()
 
   useEffect(() => {
     const getData = async () => {
       const data = await requestHelper.getMy<Folder>("folders")
-      setSelectedFolder(data[0])
       setFolders(data)
     }
 
@@ -64,9 +65,9 @@ export default function NewFolderModal({
     setValue,
     formState: { errors },
   } = form
-  const onSubmit = handleSubmit((data) => createTask(data as Task))
+  const onSubmit = handleSubmit((data) => createFolder(data as Folder))
 
-  const createTask = async (data: Task) => {
+  const createFolder = async (data: Folder) => {
     try {
       const user = await requestHelper.currentUser()
 
