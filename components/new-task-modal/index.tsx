@@ -10,7 +10,6 @@ import { makeRequest } from "../../services/makeRequest"
 import { Task } from "../../types/prisma.types"
 import TokenService from "../../services/token.service"
 import useModalStore from "../../store/modal.store"
-import { itemStates } from "../../data/itemStates"
 
 interface Props {
   isOpen: boolean
@@ -25,6 +24,25 @@ interface FormValues {
 
 export default function NewTaskModal({ isOpen, className }: Props) {
   const closeModal = useModalStore((state) => state.closeModal)
+
+  const itemStates = [
+    {
+      name: "To Do",
+      className: "bg-gray-200 text-gray-600",
+    },
+    {
+      name: "In Progress",
+      className: "bg-blue-100 text-blue-500",
+    },
+    {
+      name: "Done",
+      className: "bg-green-100 text-green-500",
+    },
+    {
+      name: "Closed",
+      className: "bg-rose-100 text-rose-500",
+    },
+  ]
 
   const [selected, setSelected] = useState(itemStates[0])
   const tokenservice = new TokenService()

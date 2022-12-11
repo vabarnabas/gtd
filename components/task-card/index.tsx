@@ -3,7 +3,6 @@ import clsx from "clsx"
 import { Fragment, useEffect, useState } from "react"
 import { BiDotsVerticalRounded } from "react-icons/bi"
 import { HiOutlineChevronDown } from "react-icons/hi"
-import { itemStates } from "../../data/itemStates"
 import { requestHelper } from "../../services/requestHelper"
 import { Task } from "../../types/prisma.types"
 
@@ -12,9 +11,16 @@ interface Props {
   title: string
   description: string
   status: string
+  fetchTasks?: () => void
 }
 
-export default function TaskCard({ id, title, description, status }: Props) {
+export default function TaskCard({
+  id,
+  title,
+  description,
+  status,
+  fetchTasks,
+}: Props) {
   const menuItems = [
     {
       title: "Subtasks",
@@ -31,6 +37,25 @@ export default function TaskCard({ id, title, description, status }: Props) {
     {
       title: "Delete",
       action: () => {},
+    },
+  ]
+
+  const itemStates = [
+    {
+      name: "To Do",
+      className: "bg-gray-200 text-gray-600",
+    },
+    {
+      name: "In Progress",
+      className: "bg-blue-100 text-blue-500",
+    },
+    {
+      name: "Done",
+      className: "bg-green-100 text-green-500",
+    },
+    {
+      name: "Closed",
+      className: "bg-rose-100 text-rose-500",
     },
   ]
 
@@ -90,6 +115,7 @@ export default function TaskCard({ id, title, description, status }: Props) {
             onChange={async (e) => {
               setSelected(e)
               await requestHelper.update<Task>("tasks", { status: e.name }, id)
+              fetchTasks && fetchTasks()
             }}
           >
             <div className="relative w-28 text-sm">
