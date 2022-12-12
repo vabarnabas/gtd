@@ -4,6 +4,7 @@ import useModalStore from "../../store/modal.store"
 import ChangePasswordModal from "../change-password-modal"
 import Navbar from "../navbar"
 import NewFolderModal from "../new-folder-modal"
+import NewSubtaskModal from "../new-subtask-modal"
 import NewTaskModal from "../new-task-modal"
 import Toast from "../toast"
 import ToastHandler from "../toast/toast-handler"
@@ -16,6 +17,8 @@ interface Props {
 
 export default function Layout({ children, fetchTasks, fetchFolders }: Props) {
   const currentModal = useModalStore((state) => state.currentModal)
+
+  console.log(currentModal)
 
   return (
     <div className="h-screen w-screen select-none bg-gray-100 text-slate-700">
@@ -46,11 +49,11 @@ export default function Layout({ children, fetchTasks, fetchFolders }: Props) {
         />
       ) : null}
       {currentModal.modal === "new-subtask" && currentModal.id !== undefined ? (
-        <NewFolderModal
-          fetchFolders={fetchFolders && fetchFolders}
+        <NewSubtaskModal
+          fetchTasks={fetchTasks && fetchTasks}
           isOpen={
-            (currentModal.modal === "new-subtask",
-            currentModal.id !== undefined)
+            currentModal.modal === "new-subtask" &&
+            currentModal.id !== undefined
           }
         />
       ) : null}

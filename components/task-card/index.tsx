@@ -6,6 +6,7 @@ import { HiOutlineChevronDown } from "react-icons/hi"
 
 import { requestHelper } from "../../services/requestHelper"
 import { useErrorHandler } from "../../services/useErrorHandler"
+import useModalStore from "../../store/modal.store"
 import { Task } from "../../types/prisma.types"
 
 interface Props {
@@ -23,12 +24,15 @@ export default function TaskCard({
   status,
   fetchTasks,
 }: Props) {
+  const openModal = useModalStore((state) => state.openModal)
   const { errorHandler } = useErrorHandler()
 
   const menuItems = [
     {
-      title: "Subtasks",
-      action: () => {},
+      title: "New Subtask",
+      action: () => {
+        openModal({ modal: "new-subtask", id })
+      },
     },
     {
       title: "Edit",
@@ -85,6 +89,7 @@ export default function TaskCard({
                 <Menu.Item key={item.title}>
                   {({ active }) => (
                     <div
+                      onClick={() => item.action()}
                       className={clsx(
                         "flex cursor-pointer items-center justify-start rounded-md px-1 py-1 text-sm",
                         { "bg-blue-500 text-white": active }
@@ -154,20 +159,13 @@ export default function TaskCard({
                       value={state}
                     >
                       {({ selected }) => (
-                        <>
-                          <span
-                            className={`block truncate ${
-                              selected ? "font-medium" : "font-normal"
-                            }`}
-                          >
-                            {state.name}
-                          </span>
-                          {selected ? (
-                            <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-600">
-                              {/* <CheckIcon className="h-5 w-5" aria-hidden="true" /> */}
-                            </span>
-                          ) : null}
-                        </>
+                        <span
+                          className={`block truncate ${
+                            selected ? "font-medium" : "font-normal"
+                          }`}
+                        >
+                          {state.name}
+                        </span>
                       )}
                     </Listbox.Option>
                   ))}
