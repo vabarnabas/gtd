@@ -4,6 +4,8 @@ import React from "react"
 import { FormProvider, useForm } from "react-hook-form"
 import { z } from "zod"
 
+import Toast from "../../components/toast"
+import ToastHandler from "../../components/toast/toast-handler"
 import { requestHelper } from "../../services/requestHelper"
 import TokenService from "../../services/token.service"
 import { useErrorHandler } from "../../services/useErrorHandler"
@@ -39,7 +41,6 @@ export default function Login() {
   const login = (data: FormValues) => {
     errorHandler(async () => {
       const token = await requestHelper.login(data.email, data.password)
-      alert(token)
 
       await tokenservice.saveToken(token.access_token)
 
@@ -51,10 +52,7 @@ export default function Login() {
     <div className="flex h-screen w-screen select-none items-center justify-center bg-white text-slate-700">
       <FormProvider {...form}>
         <form
-          onSubmit={(e) => {
-            e.preventDefault()
-            onSubmit()
-          }}
+          onSubmit={form.handleSubmit((data) => login(data))}
           className="space-y-3"
         >
           <p className="text-2xl font-bold">Login</p>
@@ -88,7 +86,7 @@ export default function Login() {
           </button>
         </form>
       </FormProvider>
-      {/* <ToastHandler position="topRight" toastComponent={Toast} /> */}
+      <ToastHandler position="topRight" toastComponent={Toast} />
     </div>
   )
 }
