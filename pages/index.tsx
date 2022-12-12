@@ -15,6 +15,7 @@ export default function Home() {
   const fetchFolders = useCallback(() => {
     errorHandler(async () => {
       const data = await requestHelper.getMy<Folder>("folders")
+      alert(JSON.stringify(data))
       setFolders(data)
     })
   }, [errorHandler])
