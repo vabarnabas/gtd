@@ -9,13 +9,7 @@ interface Props {
   className?: string
 }
 
-export default function BaseModal({
-  children,
-  isOpen,
-  onClose,
-  title,
-  className,
-}: Props) {
+export default function BaseModal({ children, isOpen, onClose, title }: Props) {
   return (
     <Transition appear show={isOpen} as={Fragment}>
       <Dialog as="div" className="relative z-10 select-none" onClose={onClose}>

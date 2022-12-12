@@ -1,0 +1,10 @@
+{
+  "*/**.ts?(x)": [
+    "prettier --write",
+    "next lint"
+  ],
+  "*/**.html": [
+    "eslint",
+    "prettier --write"
+  ]
+}
