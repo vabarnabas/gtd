@@ -1,11 +1,10 @@
 import { Listbox, Transition } from "@headlessui/react"
-import { zodResolver } from "@hookform/resolvers/zod"
 import clsx from "clsx"
 import React, { Fragment, useEffect, useState } from "react"
 import { FormProvider, useForm } from "react-hook-form"
 import { HiOutlineChevronDown } from "react-icons/hi"
-import { z } from "zod"
 
+import { FolderHelper } from "../../helpers/FolderHelper"
 import { useToast } from "../../providers/toast.provider"
 import { requestHelper } from "../../services/requestHelper"
 import { useErrorHandler } from "../../services/useErrorHandler"
@@ -21,39 +20,17 @@ interface Props {
 }
 
 interface FormValues {
-  title: string
-  description: string
-  status: string
+  parentId: string
 }
 
-export default function NewSubtaskModal({ isOpen, fetchTasks }: Props) {
+export default function ChangeFolderModal({ isOpen, fetchTasks }: Props) {
   const currentModal = useModalStore((state) => state.currentModal)
   const closeModal = useModalStore((state) => state.closeModal)
   const { errorHandler } = useErrorHandler()
 
-  const itemStates = [
-    {
-      name: "To Do",
-      className: "bg-gray-100 text-gray-500",
-    },
-    {
-      name: "In Progress",
-      className: "bg-blue-100 text-blue-500",
-    },
-    {
-      name: "Done",
-      className: "bg-green-100 text-green-500",
-    },
-    {
-      name: "Closed",
-      className: "bg-rose-100 text-rose-500",
-    },
-  ]
-
-  const [selected, setSelected] = useState(itemStates[0])
   const [task, setTask] = useState<Task>({} as Task)
-  const [folder, setFolder] = useState<Folder>({} as Folder)
-
+  const [folders, setFolders] = useState<Folder[]>([])
+  const [selectedFolder, setSelectedFolder] = useState<Folder>({} as Folder)
   const { createToast } = useToast()
 
   useEffect(() => {
@@ -65,56 +42,42 @@ export default function NewSubtaskModal({ isOpen, fetchTasks }: Props) {
 
       setTask(taskData)
 
-      if (taskData.folderId !== null) {
-        const folderData = await requestHelper.getSpecific<Folder>(
-          "folders",
-          taskData.folderId
-        )
+      const foldersData = await requestHelper.getMy<Folder>("folders")
 
-        setFolder(folderData)
-      }
+      setFolders(foldersData)
     })
   }, [currentModal.id, errorHandler])
 
-  const defaultValues: FormValues = {
-    title: "",
-    description: "",
-    status: selected.name,
-  }
+  useEffect(() => {
+    if (folders.length !== 0 && Object.keys(task).length !== 0) {
+      setSelectedFolder(folders.filter((f) => f.id === task.folderId)[0])
+    }
+  }, [folders, task])
 
-  const schema = z.object({
-    title: z.string().min(1, "Required Field"),
-    description: z.string().min(1, "Required Field"),
-    status: z.string().min(1, "Required Field"),
-  })
+  console.log("render")
+
+  const defaultValues: FormValues = {
+    parentId: "",
+  }
 
   const form = useForm<FormValues>({
     defaultValues,
-    resolver: zodResolver(schema),
   })
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    formState: { errors },
-  } = form
-  const onSubmit = handleSubmit((data) => createSubtask(data as Task))
+  const { handleSubmit, setValue } = form
+  const onSubmit = handleSubmit(() => changeFolder())
 
-  const createSubtask = async (data: Task) => {
+  const changeFolder = async () => {
     errorHandler(async () => {
-      const user = await requestHelper.currentUser()
-
-      await requestHelper.create<Task>("tasks", {
-        ...data,
-        userId: user.id,
-        folderId: folder.id,
-        parentId: task.id,
-      })
+      await requestHelper.update<Task>(
+        "tasks",
+        { folderId: selectedFolder.id },
+        task.id
+      )
       fetchTasks && (await fetchTasks())
       closeModal()
       createToast({
         title: "Success.",
-        subtitle: "You have successfully created a new subtask.",
+        subtitle: "You have successfully updated the folder.",
         expiration: 10000,
         type: "success",
       })
@@ -122,54 +85,31 @@ export default function NewSubtaskModal({ isOpen, fetchTasks }: Props) {
   }
 
   return (
-    <BaseModal title="Create New Subtask" isOpen={isOpen} onClose={closeModal}>
-      {Object.keys(task).length !== 0 && Object.keys(folder).length !== 0 ? (
+    <BaseModal title="Change Folder" isOpen={isOpen} onClose={closeModal}>
+      {Object.keys(task).length !== 0 && folders.length !== 0 ? (
         <FormProvider {...form}>
           <form className="w-full space-y-3" onSubmit={onSubmit}>
-            <div className="">
-              <input
-                className="w-full rounded-md bg-gray-100 py-1 px-3 outline-none"
-                {...register("title")}
-                placeholder="Title"
-              />
-              {errors.title?.message && (
-                <p className="mt-0.5 pl-2 text-xs text-rose-500">
-                  {errors.title.message}
-                </p>
-              )}
-            </div>
-            <div className="">
-              <textarea
-                className="w-full resize-none rounded-md bg-gray-100 py-1 px-3 outline-none"
-                {...register("description")}
-                placeholder="Description"
-              />
-              {errors.description?.message && (
-                <p className="mt-0.5 pl-2 text-xs text-rose-500">
-                  {errors.description.message}
-                </p>
-              )}
-            </div>
             <div className="w-full rounded-md bg-gray-100 py-1 px-3 text-gray-400 outline-none">
-              {`${folder.title} / ${task.title}`}
+              {`${
+                FolderHelper.findFolder(folders, task.folderId as string).title
+              } / ${task.title}`}
             </div>
             <div className="">
               <Listbox
-                value={selected}
+                value={selectedFolder}
                 onChange={(e) => {
-                  setValue("status", e.name)
-                  setSelected(e)
+                  setValue("parentId", e.title)
+                  setSelectedFolder(e)
                 }}
               >
                 <div className="relative w-full">
                   <Listbox.Button
                     className={clsx(
-                      "cursor-pointers relative w-full rounded-md py-1 px-3 text-left focus:outline-none",
-                      selected.className
+                      "cursor-pointers relative w-full rounded-md bg-gray-100 py-1 px-3 text-left focus:outline-none"
                     )}
                   >
-                    <span className="flex items-center justify-between truncate">
-                      {selected.name} <HiOutlineChevronDown />
+                    <span className="flex items-center justify-between truncate text-gray-500">
+                      {selectedFolder.title} <HiOutlineChevronDown />
                     </span>
                   </Listbox.Button>
                   <Transition
@@ -178,17 +118,17 @@ export default function NewSubtaskModal({ isOpen, fetchTasks }: Props) {
                     leaveFrom="opacity-100"
                     leaveTo="opacity-0"
                   >
-                    <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white p-1 py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                      {itemStates.map((state, stateIdx) => (
+                    <Listbox.Options className="absolute z-10 mt-1 max-h-40 w-full overflow-auto rounded-md bg-white p-1 py-1 text-gray-500 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                      {folders.map((folder, stateIdx) => (
                         <Listbox.Option
                           key={stateIdx}
                           className={({ active }) =>
                             clsx(
                               "relative cursor-pointer select-none rounded-md py-1 px-1",
-                              active ? state.className : null
+                              active ? "bg-blue-500 text-white" : null
                             )
                           }
-                          value={state}
+                          value={folder}
                         >
                           {({ selected }) => (
                             <>
@@ -197,7 +137,7 @@ export default function NewSubtaskModal({ isOpen, fetchTasks }: Props) {
                                   selected ? "font-medium" : "font-normal"
                                 }`}
                               >
-                                {state.name}
+                                {folder.title}
                               </span>
                               {selected ? (
                                 <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-600">
@@ -212,11 +152,6 @@ export default function NewSubtaskModal({ isOpen, fetchTasks }: Props) {
                   </Transition>
                 </div>
               </Listbox>
-              {errors.status?.message && (
-                <p className="mt-0.5 pl-2 text-xs text-rose-500">
-                  {errors.status.message}
-                </p>
-              )}
             </div>
             <button className="w-full rounded-md bg-blue-500 px-2 py-1 text-white hover:bg-blue-600">
               Create

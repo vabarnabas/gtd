@@ -1,6 +1,7 @@
 import Head from "next/head"
 
 import useModalStore from "../../store/modal.store"
+import ChangeFolderModal from "../change-folder-modal"
 import ChangePasswordModal from "../change-password-modal"
 import Navbar from "../navbar"
 import NewFolderModal from "../new-folder-modal"
@@ -18,8 +19,6 @@ interface Props {
 export default function Layout({ children, fetchTasks, fetchFolders }: Props) {
   const currentModal = useModalStore((state) => state.currentModal)
 
-  console.log(currentModal)
-
   return (
     <div className="h-screen w-screen select-none bg-gray-100 text-slate-700">
       <Head>
@@ -34,6 +33,16 @@ export default function Layout({ children, fetchTasks, fetchFolders }: Props) {
       {currentModal.modal === "change-password" ? (
         <ChangePasswordModal
           isOpen={currentModal.modal === "change-password"}
+        />
+      ) : null}
+      {currentModal.modal === "change-folder" &&
+      currentModal.id !== undefined ? (
+        <ChangeFolderModal
+          fetchTasks={fetchTasks && fetchTasks}
+          isOpen={
+            currentModal.modal === "change-folder" &&
+            currentModal.id !== undefined
+          }
         />
       ) : null}
       {currentModal.modal === "new-task" ? (

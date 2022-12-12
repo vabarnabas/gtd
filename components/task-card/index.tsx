@@ -40,7 +40,9 @@ export default function TaskCard({
     },
     {
       title: "Change Folder",
-      action: () => {},
+      action: () => {
+        openModal({ modal: "change-folder", id })
+      },
     },
   ]
 
