@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useRouter } from "next/router"
-import React, { useState } from "react"
+import React from "react"
 import { FormProvider, useForm } from "react-hook-form"
 import { z } from "zod"
 
@@ -8,6 +8,7 @@ import Toast from "../../components/toast"
 import ToastHandler from "../../components/toast/toast-handler"
 import { requestHelper } from "../../services/requestHelper"
 import TokenService from "../../services/token.service"
+import { useErrorHandler } from "../../services/useErrorHandler"
 
 interface FormValues {
   email: string
@@ -17,7 +18,7 @@ interface FormValues {
 export default function Login() {
   const router = useRouter()
   const tokenservice = new TokenService()
-  const [error, setError] = useState("")
+  const { errorHandler } = useErrorHandler()
   const defaultValues: FormValues = {
     email: "",
     password: "",
@@ -35,7 +36,6 @@ export default function Login() {
   const {
     register,
     handleSubmit,
-    setValue,
     formState: { errors },
   } = form
 
@@ -44,15 +44,12 @@ export default function Login() {
   })
 
   const login = async (data: FormValues) => {
-    setError("")
-    try {
+    errorHandler(async () => {
       const token = await requestHelper.login(data.email, data.password)
-      tokenservice.saveToken(token.access_token)
+      await tokenservice.saveToken(token.access_token)
 
       router.push("/")
-    } catch {
-      setError("Invalid Credentials")
-    }
+    })
   }
 
   return (
@@ -84,9 +81,6 @@ export default function Login() {
               <p className="mt-0.5 pl-2 text-xs text-rose-500">
                 {errors.password.message}
               </p>
-            )}
-            {error && (
-              <p className="mt-0.5 pl-2 text-xs text-rose-500">{error}</p>
             )}
           </div>
           <button className="w-full rounded-md bg-blue-500 px-2 py-1 text-white hover:bg-blue-600">
