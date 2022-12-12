@@ -108,6 +108,7 @@ export default function NewSubtaskModal({ isOpen, fetchTasks }: Props) {
         ...data,
         userId: user.id,
         folderId: folder.id,
+        parentId: task.id,
       })
       fetchTasks && (await fetchTasks())
       closeModal()
