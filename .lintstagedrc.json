@@ -1,10 +1,6 @@
 {
-  "*/**.ts?(x)": [
+  "*.{ts,tsx}": [
     "prettier --write",
-    "next lint"
-  ],
-  "*/**.html": [
-    "eslint",
-    "prettier --write"
+    "git add"
   ]
 }
