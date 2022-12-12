@@ -4,8 +4,6 @@ import React from "react"
 import { FormProvider, useForm } from "react-hook-form"
 import { z } from "zod"
 
-import Toast from "../../components/toast"
-import ToastHandler from "../../components/toast/toast-handler"
 import { requestHelper } from "../../services/requestHelper"
 import TokenService from "../../services/token.service"
 import { useErrorHandler } from "../../services/useErrorHandler"
@@ -90,7 +88,7 @@ export default function Login() {
           </button>
         </form>
       </FormProvider>
-      <ToastHandler position="topRight" toastComponent={Toast} />
+      {/* <ToastHandler position="topRight" toastComponent={Toast} /> */}
     </div>
   )
 }
