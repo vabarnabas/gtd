@@ -38,11 +38,15 @@ export default function Login() {
     login(data)
   })
 
-  const login = async (data: FormValues) => {
-    const token = await requestHelper.login(data.email, data.password)
-    await tokenservice.saveToken(token.access_token)
+  const login = (data: FormValues) => {
+    errorHandler(async () => {
+      const token = await requestHelper.login(data.email, data.password)
+      alert(token)
 
-    router.push("/")
+      await tokenservice.saveToken(token.access_token)
+
+      router.push("/")
+    })
   }
 
   return (
