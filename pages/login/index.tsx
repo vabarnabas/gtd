@@ -54,7 +54,6 @@ export default function Login() {
 
   return (
     <div className="flex h-screen w-screen select-none items-center justify-center bg-white text-slate-700">
-      <ToastHandler position="topRight" toastComponent={Toast} />
       <FormProvider {...form}>
         <form onSubmit={onSubmit} className="space-y-3">
           <p className="text-2xl font-bold">Login</p>
@@ -88,6 +87,7 @@ export default function Login() {
           </button>
         </form>
       </FormProvider>
+      <ToastHandler position="topRight" toastComponent={Toast} />
     </div>
   )
 }
