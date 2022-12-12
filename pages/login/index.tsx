@@ -55,9 +55,12 @@ export default function Login() {
     <div className="flex h-screen w-screen select-none items-center justify-center bg-white text-slate-700">
       <FormProvider {...form}>
         <form
-          onSubmit={handleSubmit((data) => {
-            login(data)
-          })}
+          onSubmit={(e) => {
+            e.preventDefault()
+            handleSubmit((data) => {
+              login(data)
+            })
+          }}
           className="space-y-3"
         >
           <p className="text-2xl font-bold">Login</p>
