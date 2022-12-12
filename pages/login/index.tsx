@@ -43,7 +43,7 @@ export default function Login() {
     login(data)
   })
 
-  const login = async (data: FormValues) => {
+  const login = (data: FormValues) => {
     errorHandler(async () => {
       const token = await requestHelper.login(data.email, data.password)
       await tokenservice.saveToken(token.access_token)

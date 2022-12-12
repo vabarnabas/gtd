@@ -90,7 +90,7 @@ export default function NewTaskModal({ isOpen, fetchTasks }: Props) {
   } = form
   const onSubmit = handleSubmit((data) => createTask(data as Task))
 
-  const createTask = async (data: Task) => {
+  const createTask = (data: Task) => {
     errorHandler(async () => {
       const user = await requestHelper.currentUser()
 
