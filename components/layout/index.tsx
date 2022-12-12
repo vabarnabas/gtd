@@ -16,7 +16,6 @@ interface Props {
 
 export default function Layout({ children, fetchTasks, fetchFolders }: Props) {
   const currentModal = useModalStore((state) => state.currentModal)
-  const closeModal = useModalStore((state) => state.closeModal)
 
   return (
     <div className="h-screen w-screen select-none bg-gray-100 text-slate-700">
@@ -44,6 +43,15 @@ export default function Layout({ children, fetchTasks, fetchFolders }: Props) {
         <NewFolderModal
           fetchFolders={fetchFolders && fetchFolders}
           isOpen={currentModal.modal === "new-folder"}
+        />
+      ) : null}
+      {currentModal.modal === "new-subtask" && currentModal.id !== undefined ? (
+        <NewFolderModal
+          fetchFolders={fetchFolders && fetchFolders}
+          isOpen={
+            (currentModal.modal === "new-subtask",
+            currentModal.id !== undefined)
+          }
         />
       ) : null}
     </div>
