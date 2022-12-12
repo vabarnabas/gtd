@@ -1,5 +1,6 @@
 import clsx from "clsx"
 import type { ComponentType } from "react"
+
 import { ToastProps, useToast } from "../../providers/toast.provider"
 
 export type ToastPosition = "topLeft" | "topRight"

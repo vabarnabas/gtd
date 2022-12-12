@@ -1,8 +1,8 @@
 import { Transition } from "@headlessui/react"
-
 import clsx from "clsx"
 import React, { useEffect, useState } from "react"
 import { HiX } from "react-icons/hi"
+
 import { ToastProps, useToast } from "../../providers/toast.provider"
 
 export default function Toast({

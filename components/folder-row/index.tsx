@@ -1,8 +1,8 @@
 import autoAnimate from "@formkit/auto-animate"
 import { useRouter } from "next/router"
-import React, { useEffect, useRef, useState } from "react"
-import { HiFolder, HiFolderAdd, HiFolderRemove, HiX } from "react-icons/hi"
+import React, { useEffect, useRef } from "react"
 import { FiCornerDownRight } from "react-icons/fi"
+
 import { FolderHelper } from "../../helpers/FolderHelper"
 import { Folder } from "../../types/prisma.types"
 

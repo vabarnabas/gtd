@@ -1,12 +1,11 @@
 import { Listbox, Menu, Transition } from "@headlessui/react"
 import clsx from "clsx"
-import { useRouter } from "next/router"
-import { Fragment, useEffect, useState } from "react"
+import { Fragment, useState } from "react"
 import { BiDotsVerticalRounded } from "react-icons/bi"
 import { HiOutlineChevronDown } from "react-icons/hi"
-import { useToast } from "../../providers/toast.provider"
+
 import { requestHelper } from "../../services/requestHelper"
-import TokenService from "../../services/token.service"
+import { useErrorHandler } from "../../services/useErrorHandler"
 import { Task } from "../../types/prisma.types"
 
 interface Props {
@@ -24,7 +23,7 @@ export default function TaskCard({
   status,
   fetchTasks,
 }: Props) {
-  const { createToast } = useToast()
+  const { errorHandler } = useErrorHandler()
 
   const menuItems = [
     {
@@ -113,8 +112,8 @@ export default function TaskCard({
           </p> */}
           <Listbox
             value={selected}
-            onChange={async (e) => {
-              try {
+            onChange={(e) => {
+              errorHandler(async () => {
                 await requestHelper.update<Task>(
                   "tasks",
                   { status: e.name },
@@ -122,15 +121,7 @@ export default function TaskCard({
                 )
                 setSelected(e)
                 fetchTasks && fetchTasks()
-              } catch {
-                createToast({
-                  title: "Something went wrong.",
-                  subtitle:
-                    "Something went wrong on our end, please try again.",
-                  expiration: 10000,
-                  type: "error",
-                })
-              }
+              })
             }}
           >
             <div className="relative w-28 text-sm">

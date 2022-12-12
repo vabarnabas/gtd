@@ -2,8 +2,8 @@ import { Menu, Transition } from "@headlessui/react"
 import clsx from "clsx"
 import { useRouter } from "next/router"
 import { Fragment } from "react"
-import { BiDotsVerticalRounded } from "react-icons/bi"
 import { HiChevronDown } from "react-icons/hi"
+
 import TokenService from "../../services/token.service"
 import useModalStore from "../../store/modal.store"
 

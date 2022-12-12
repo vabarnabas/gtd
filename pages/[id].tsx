@@ -1,47 +1,34 @@
 import { useRouter } from "next/router"
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useState } from "react"
+
 import BreadCrumb from "../components/breadcrumb"
 import Layout from "../components/layout"
 import Spinner from "../components/spinner"
 import TaskGrid from "../components/task-grid"
 import { FolderHelper } from "../helpers/FolderHelper"
-import { useToast } from "../providers/toast.provider"
 import { requestHelper } from "../services/requestHelper"
+import { useErrorHandler } from "../services/useErrorHandler"
 import { Folder, Task } from "../types/prisma.types"
 
 export default function Home() {
-  const { createToast } = useToast()
+  const { errorHandler } = useErrorHandler()
   const router = useRouter()
   const id = router.query.id as string
 
   const [tasks, setTasks] = useState<Task[]>([])
   const [folders, setFolders] = useState<Folder[]>([])
 
-  const fetchTasks = async () => {
-    try {
+  const fetchTasks = () => {
+    errorHandler(async () => {
       const data = await requestHelper.getMy<Task>("tasks")
       setTasks(data)
-    } catch {
-      createToast({
-        title: "Something went wrong.",
-        subtitle: "Something went wrong on our end, please try again.",
-        expiration: 10000,
-        type: "error",
-      })
-    }
+    })
   }
-  const fetchFolders = async () => {
-    try {
+  const fetchFolders = () => {
+    errorHandler(async () => {
       const data = await requestHelper.getMy<Folder>("folders")
       setFolders(data)
-    } catch {
-      createToast({
-        title: "Something went wrong.",
-        subtitle: "Something went wrong on our end, please try again.",
-        expiration: 10000,
-        type: "error",
-      })
-    }
+    })
   }
 
   useEffect(() => {

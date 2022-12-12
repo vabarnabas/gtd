@@ -1,16 +1,17 @@
+import { Listbox, Transition } from "@headlessui/react"
+import { zodResolver } from "@hookform/resolvers/zod"
+import clsx from "clsx"
 import React, { Fragment, useEffect, useState } from "react"
 import { FormProvider, useForm } from "react-hook-form"
-import { z } from "zod"
-import { zodResolver } from "@hookform/resolvers/zod"
-import BaseModal from "../base-modal"
-import { Listbox, Transition } from "@headlessui/react"
-import clsx from "clsx"
 import { HiOutlineChevronDown } from "react-icons/hi"
-import { Folder, Task } from "../../types/prisma.types"
-import TokenService from "../../services/token.service"
-import useModalStore from "../../store/modal.store"
-import { requestHelper } from "../../services/requestHelper"
+import { z } from "zod"
+
 import { useToast } from "../../providers/toast.provider"
+import { requestHelper } from "../../services/requestHelper"
+import { useErrorHandler } from "../../services/useErrorHandler"
+import useModalStore from "../../store/modal.store"
+import { Folder, Task } from "../../types/prisma.types"
+import BaseModal from "../base-modal"
 import Spinner from "../spinner"
 
 interface Props {
@@ -26,8 +27,9 @@ interface FormValues {
   folderId: string
 }
 
-export default function NewTaskModal({ isOpen, className, fetchTasks }: Props) {
+export default function NewTaskModal({ isOpen, fetchTasks }: Props) {
   const closeModal = useModalStore((state) => state.closeModal)
+  const { errorHandler } = useErrorHandler()
 
   const itemStates = [
     {
@@ -51,7 +53,6 @@ export default function NewTaskModal({ isOpen, className, fetchTasks }: Props) {
   const [selected, setSelected] = useState(itemStates[0])
   const [folders, setFolders] = useState<Folder[]>([])
   const [selectedFolder, setSelectedFolder] = useState<Folder>({} as Folder)
-  const tokenservice = new TokenService()
   const { createToast } = useToast()
 
   useEffect(() => {
@@ -90,7 +91,7 @@ export default function NewTaskModal({ isOpen, className, fetchTasks }: Props) {
   const onSubmit = handleSubmit((data) => createTask(data as Task))
 
   const createTask = async (data: Task) => {
-    try {
+    errorHandler(async () => {
       const user = await requestHelper.currentUser()
 
       await requestHelper.create<Task>("tasks", {
@@ -106,14 +107,7 @@ export default function NewTaskModal({ isOpen, className, fetchTasks }: Props) {
         expiration: 10000,
         type: "success",
       })
-    } catch {
-      createToast({
-        title: "Something went wrong.",
-        subtitle: "Something went wrong on our end, please try again.",
-        expiration: 10000,
-        type: "error",
-      })
-    }
+    })
   }
 
   return (

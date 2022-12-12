@@ -1,16 +1,15 @@
-import React, { Fragment, useEffect, useState } from "react"
-import { FormProvider, useForm } from "react-hook-form"
-import { string, z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
-import BaseModal from "../base-modal"
-
-import { Task } from "../../types/prisma.types"
-import TokenService from "../../services/token.service"
-import useModalStore from "../../store/modal.store"
-import { requestHelper } from "../../services/requestHelper"
-import { useToast } from "../../providers/toast.provider"
-import Spinner from "../spinner"
 import { useRouter } from "next/router"
+import React from "react"
+import { FormProvider, useForm } from "react-hook-form"
+import { z } from "zod"
+
+import { useToast } from "../../providers/toast.provider"
+import { requestHelper } from "../../services/requestHelper"
+import TokenService from "../../services/token.service"
+import { useErrorHandler } from "../../services/useErrorHandler"
+import useModalStore from "../../store/modal.store"
+import BaseModal from "../base-modal"
 
 interface Props {
   isOpen: boolean
@@ -23,9 +22,10 @@ interface FormValues {
   passwordAgain: string
 }
 
-export default function ChangePasswordModal({ isOpen, className }: Props) {
+export default function ChangePasswordModal({ isOpen }: Props) {
   const closeModal = useModalStore((state) => state.closeModal)
   const router = useRouter()
+  const { errorHandler } = useErrorHandler()
   const tokenservice = new TokenService()
 
   const { createToast } = useToast()
@@ -59,7 +59,6 @@ export default function ChangePasswordModal({ isOpen, className }: Props) {
   const {
     register,
     handleSubmit,
-    setValue,
     formState: { errors },
   } = form
   const onSubmit = handleSubmit((data) => changePassword(data))
@@ -68,25 +67,21 @@ export default function ChangePasswordModal({ isOpen, className }: Props) {
     oldPassword: string
     password: string
   }) => {
-    try {
-      await requestHelper.changePassword(data.oldPassword, data.password)
-      closeModal()
-      createToast({
-        title: "Success.",
-        subtitle: "You have successfully changed your password.",
-        expiration: 10000,
-        type: "success",
-      })
-      await tokenservice.deleteToken()
-      router.push("/login")
-    } catch {
-      createToast({
-        title: "Something went wrong.",
-        subtitle: "Something went wrong on our end, please try again.",
-        expiration: 10000,
-        type: "error",
-      })
-    }
+    errorHandler(
+      async () => {
+        await requestHelper.changePassword(data.oldPassword, data.password)
+        closeModal()
+        createToast({
+          title: "Success.",
+          subtitle: "You have successfully changed your password.",
+          expiration: 10000,
+          type: "success",
+        })
+        await tokenservice.deleteToken()
+        router.push("/login")
+      },
+      { log: true }
+    )
   }
 
   return (

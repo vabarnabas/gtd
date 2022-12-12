@@ -1,15 +1,17 @@
+import { Listbox, Transition } from "@headlessui/react"
+import { zodResolver } from "@hookform/resolvers/zod"
+import clsx from "clsx"
 import React, { Fragment, useEffect, useState } from "react"
 import { FormProvider, useForm } from "react-hook-form"
-import { z } from "zod"
-import { zodResolver } from "@hookform/resolvers/zod"
-import BaseModal from "../base-modal"
-import { Listbox, Transition } from "@headlessui/react"
-import clsx from "clsx"
 import { HiOutlineChevronDown } from "react-icons/hi"
-import { Folder } from "../../types/prisma.types"
-import useModalStore from "../../store/modal.store"
-import { requestHelper } from "../../services/requestHelper"
+import { z } from "zod"
+
 import { useToast } from "../../providers/toast.provider"
+import { requestHelper } from "../../services/requestHelper"
+import { useErrorHandler } from "../../services/useErrorHandler"
+import useModalStore from "../../store/modal.store"
+import { Folder } from "../../types/prisma.types"
+import BaseModal from "../base-modal"
 import Spinner from "../spinner"
 
 interface Props {
@@ -23,12 +25,9 @@ interface FormValues {
   parentId: string
 }
 
-export default function NewFolderModal({
-  isOpen,
-  className,
-  fetchFolders,
-}: Props) {
+export default function NewFolderModal({ isOpen, fetchFolders }: Props) {
   const closeModal = useModalStore((state) => state.closeModal)
+  const { errorHandler } = useErrorHandler()
 
   const [folders, setFolders] = useState<Folder[]>([])
   const [selectedFolder, setSelectedFolder] = useState({
@@ -68,7 +67,7 @@ export default function NewFolderModal({
   const onSubmit = handleSubmit((data) => createFolder(data as Folder))
 
   const createFolder = async (data: Folder) => {
-    try {
+    errorHandler(async () => {
       const user = await requestHelper.currentUser()
 
       await requestHelper.create<Folder>("folders", {
@@ -84,14 +83,7 @@ export default function NewFolderModal({
         expiration: 10000,
         type: "success",
       })
-    } catch {
-      createToast({
-        title: "Something went wrong.",
-        subtitle: "Something went wrong on our end, please try again.",
-        expiration: 10000,
-        type: "error",
-      })
-    }
+    })
   }
 
   return (

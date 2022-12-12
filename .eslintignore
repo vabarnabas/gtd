@@ -1,0 +1,7 @@
+node_modules
+dist
+.next
+.cache
+**/*.config.js
+libs/graphql/src/lib
+**/*.g.*

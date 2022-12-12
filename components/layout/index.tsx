@@ -1,4 +1,5 @@
 import Head from "next/head"
+
 import useModalStore from "../../store/modal.store"
 import ChangePasswordModal from "../change-password-modal"
 import Navbar from "../navbar"

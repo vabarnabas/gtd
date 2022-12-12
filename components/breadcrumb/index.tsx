@@ -1,9 +1,8 @@
 import clsx from "clsx"
 import { useRouter } from "next/router"
 import React from "react"
-import { HiChevronRight } from "react-icons/hi"
 import { FaHome } from "react-icons/fa"
-import { FolderHelper } from "../../helpers/FolderHelper"
+import { HiChevronRight } from "react-icons/hi"
 import ScrollContainer from "react-indiana-drag-scroll"
 
 interface Props {

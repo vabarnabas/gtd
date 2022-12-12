@@ -1,8 +1,8 @@
+import autoAnimate from "@formkit/auto-animate"
 import React, { useEffect, useRef } from "react"
-import { useAutoAnimate } from "@formkit/auto-animate/react"
+
 import { Task } from "../../types/prisma.types"
 import TaskCard from "../task-card"
-import autoAnimate from "@formkit/auto-animate"
 
 interface Props {
   tasks: Task[]
