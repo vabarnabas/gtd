@@ -19,10 +19,6 @@ export default function Login() {
   const router = useRouter()
   const tokenservice = new TokenService()
   const { errorHandler } = useErrorHandler()
-  const defaultValues: FormValues = {
-    email: "",
-    password: "",
-  }
 
   const schema = z.object({
     email: z.string().min(1, "Required Field"),
@@ -42,13 +38,11 @@ export default function Login() {
     login(data)
   })
 
-  const login = (data: FormValues) => {
-    errorHandler(async () => {
-      const token = await requestHelper.login(data.email, data.password)
-      await tokenservice.saveToken(token.access_token)
+  const login = async (data: FormValues) => {
+    const token = await requestHelper.login(data.email, data.password)
+    await tokenservice.saveToken(token.access_token)
 
-      router.push("/")
-    })
+    router.push("/")
   }
 
   return (
@@ -57,9 +51,7 @@ export default function Login() {
         <form
           onSubmit={(e) => {
             e.preventDefault()
-            handleSubmit((data) => {
-              login(data)
-            })
+            onSubmit()
           }}
           className="space-y-3"
         >
