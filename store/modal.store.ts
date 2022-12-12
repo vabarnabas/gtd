@@ -3,6 +3,7 @@ import create from "zustand"
 interface Modal {
   modal: string
   id?: string
+  action?: () => void
 }
 
 interface ModalStore {
@@ -13,8 +14,8 @@ interface ModalStore {
 
 const useModalStore = create<ModalStore>()((set) => ({
   currentModal: { modal: "" },
-  openModal: (input: Modal) => set((state) => ({ currentModal: input })),
-  closeModal: () => set((state) => ({ currentModal: { modal: "" } })),
+  openModal: (input: Modal) => set(() => ({ currentModal: input })),
+  closeModal: () => set(() => ({ currentModal: { modal: "" } })),
 }))
 
 export default useModalStore

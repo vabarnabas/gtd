@@ -128,7 +128,7 @@ export default function ChangePasswordModal({ isOpen }: Props) {
             )}
           </div>
           <button className="w-full rounded-md bg-blue-500 px-2 py-1 text-white hover:bg-blue-600">
-            Open
+            Update
           </button>
         </form>
       </FormProvider>

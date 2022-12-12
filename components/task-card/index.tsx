@@ -35,13 +35,20 @@ export default function TaskCard({
       },
     },
     {
-      title: "Edit",
-      action: () => {},
-    },
-    {
       title: "Change Folder",
       action: () => {
         openModal({ modal: "change-folder", id })
+      },
+    },
+    {
+      title: "Delete Task",
+      action: () => {
+        openModal({
+          modal: "confirm",
+          action: () => {
+            requestHelper.delete<Task>("tasks", id)
+          },
+        })
       },
     },
   ]

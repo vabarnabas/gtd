@@ -54,8 +54,6 @@ export default function ChangeFolderModal({ isOpen, fetchTasks }: Props) {
     }
   }, [folders, task])
 
-  console.log("render")
-
   const defaultValues: FormValues = {
     parentId: "",
   }
@@ -154,7 +152,7 @@ export default function ChangeFolderModal({ isOpen, fetchTasks }: Props) {
               </Listbox>
             </div>
             <button className="w-full rounded-md bg-blue-500 px-2 py-1 text-white hover:bg-blue-600">
-              Create
+              Update
             </button>
           </form>
         </FormProvider>
