@@ -1,6 +1,5 @@
 import React from "react"
 
-import { useToast } from "../../providers/toast.provider"
 import { useErrorHandler } from "../../services/useErrorHandler"
 import useModalStore from "../../store/modal.store"
 import BaseModal from "../base-modal"
@@ -14,8 +13,6 @@ export default function ConfirmModal({ isOpen }: Props) {
   const currentModal = useModalStore((state) => state.currentModal)
   const closeModal = useModalStore((state) => state.closeModal)
   const { errorHandler } = useErrorHandler()
-
-  const { createToast } = useToast()
 
   return (
     <BaseModal title="Confirm" isOpen={isOpen} onClose={closeModal}>

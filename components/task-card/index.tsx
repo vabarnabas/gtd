@@ -4,6 +4,7 @@ import { Fragment, useState } from "react"
 import { BiDotsVerticalRounded } from "react-icons/bi"
 import { HiOutlineChevronDown } from "react-icons/hi"
 
+import { useToast } from "../../providers/toast.provider"
 import { requestHelper } from "../../services/requestHelper"
 import { useErrorHandler } from "../../services/useErrorHandler"
 import useModalStore from "../../store/modal.store"
@@ -26,6 +27,7 @@ export default function TaskCard({
 }: Props) {
   const openModal = useModalStore((state) => state.openModal)
   const { errorHandler } = useErrorHandler()
+  const { createToast } = useToast()
 
   const menuItems = [
     {
@@ -45,8 +47,15 @@ export default function TaskCard({
       action: () => {
         openModal({
           modal: "confirm",
-          action: () => {
-            requestHelper.delete<Task>("tasks", id)
+          action: async () => {
+            await requestHelper.delete<Task>("tasks", id)
+            fetchTasks && (await fetchTasks())
+            createToast({
+              title: "Success.",
+              subtitle: "You have successfully deleted the task.",
+              expiration: 10000,
+              type: "success",
+            })
           },
         })
       },
