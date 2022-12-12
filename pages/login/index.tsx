@@ -30,7 +30,6 @@ export default function Login() {
   })
 
   const form = useForm<FormValues>({
-    defaultValues,
     resolver: zodResolver(schema),
   })
   const {
