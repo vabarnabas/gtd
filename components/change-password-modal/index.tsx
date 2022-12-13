@@ -30,12 +30,6 @@ export default function ChangePasswordModal({ isOpen }: Props) {
 
   const { createToast } = useToast()
 
-  const defaultValues: FormValues = {
-    oldPassword: "",
-    password: "",
-    passwordAgain: "",
-  }
-
   const schema = z
     .object({
       oldPassword: z.string().min(1, "Required Field"),
@@ -53,7 +47,6 @@ export default function ChangePasswordModal({ isOpen }: Props) {
     })
 
   const form = useForm<FormValues>({
-    defaultValues,
     resolver: zodResolver(schema),
   })
   const {
@@ -67,21 +60,18 @@ export default function ChangePasswordModal({ isOpen }: Props) {
     oldPassword: string
     password: string
   }) => {
-    errorHandler(
-      async () => {
-        await requestHelper.changePassword(data.oldPassword, data.password)
-        closeModal()
-        createToast({
-          title: "Success.",
-          subtitle: "You have successfully changed your password.",
-          expiration: 10000,
-          type: "success",
-        })
-        await tokenservice.deleteToken()
-        router.push("/login")
-      },
-      { log: true }
-    )
+    errorHandler(async () => {
+      await requestHelper.changePassword(data.oldPassword, data.password)
+      createToast({
+        title: "Success.",
+        subtitle: "You have successfully changed your password.",
+        expiration: 10000,
+        type: "success",
+      })
+      await tokenservice.deleteToken()
+      router.push("/login")
+      closeModal()
+    })
   }
 
   return (
