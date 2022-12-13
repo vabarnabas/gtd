@@ -1,10 +1,10 @@
 import { Listbox, Transition } from "@headlessui/react"
-import { zodResolver } from "@hookform/resolvers/zod"
+import { yupResolver } from "@hookform/resolvers/yup"
 import clsx from "clsx"
 import React, { Fragment, useEffect, useState } from "react"
 import { FormProvider, useForm } from "react-hook-form"
 import { HiOutlineChevronDown } from "react-icons/hi"
-import { z } from "zod"
+import * as yup from "yup"
 
 import { useToast } from "../../providers/toast.provider"
 import { requestHelper } from "../../services/requestHelper"
@@ -72,15 +72,15 @@ export default function NewTaskModal({ isOpen, fetchTasks }: Props) {
     folderId: "",
   }
 
-  const schema = z.object({
-    title: z.string().min(1, "Required Field"),
-    description: z.string().min(1, "Required Field"),
-    status: z.string().min(1, "Required Field"),
+  const schema = yup.object().shape({
+    title: yup.string().required("Required Field"),
+    description: yup.string().required("Required Field"),
+    status: yup.string().required("Required Field"),
   })
 
   const form = useForm<FormValues>({
     defaultValues,
-    resolver: zodResolver(schema),
+    resolver: yupResolver(schema),
   })
   const {
     register,
