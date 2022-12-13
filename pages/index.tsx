@@ -1,9 +1,6 @@
 import { useCallback, useEffect, useState } from "react"
 
-import FolderRow from "../components/folder-row"
 import Layout from "../components/layout"
-import Spinner from "../components/spinner"
-import { FolderHelper } from "../helpers/FolderHelper"
 import { requestHelper } from "../services/requestHelper"
 import { useErrorHandler } from "../services/useErrorHandler"
 import { Folder } from "../types/prisma.types"
@@ -26,7 +23,7 @@ export default function Home() {
 
   return (
     <Layout fetchFolders={fetchFolders}>
-      <div className="flex h-full w-full flex-col items-center rounded-md px-4 pt-4 pb-2 shadow">
+      {/* <div className="flex h-full w-full flex-col items-center rounded-md px-4 pt-4 pb-2 shadow">
         {folders.length !== 0 ? (
           <div className="w-full rounded-md bg-white p-4 shadow-md">
             <p className="mb-3 text-lg font-bold">My Folders</p>
@@ -37,7 +34,8 @@ export default function Home() {
         ) : (
           <Spinner />
         )}
-      </div>
+      </div> */}
+      <div className="">{JSON.stringify(folders)}</div>
     </Layout>
   )
 }
