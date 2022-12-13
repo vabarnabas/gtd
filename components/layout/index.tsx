@@ -42,6 +42,7 @@ export default function Layout({ children, fetchTasks, fetchFolders }: Props) {
       {currentModal.modal === "change-folder" &&
       currentModal.id !== undefined ? (
         <ChangeFolderModal
+          fetchTasks={fetchTasks && fetchTasks}
           isOpen={
             currentModal.modal === "change-folder" &&
             currentModal.id !== undefined
@@ -50,13 +51,20 @@ export default function Layout({ children, fetchTasks, fetchFolders }: Props) {
       ) : null}
 
       {currentModal.modal === "new-task" ? (
-        <NewTaskModal isOpen={currentModal.modal === "new-task"} />
+        <NewTaskModal
+          fetchTasks={fetchTasks && fetchTasks}
+          isOpen={currentModal.modal === "new-task"}
+        />
       ) : null}
       {currentModal.modal === "new-folder" ? (
-        <NewFolderModal isOpen={currentModal.modal === "new-folder"} />
+        <NewFolderModal
+          fetchFolders={fetchFolders && fetchFolders}
+          isOpen={currentModal.modal === "new-folder"}
+        />
       ) : null}
       {currentModal.modal === "new-subtask" && currentModal.id !== undefined ? (
         <NewSubtaskModal
+          fetchTasks={fetchTasks && fetchTasks}
           isOpen={
             currentModal.modal === "new-subtask" &&
             currentModal.id !== undefined

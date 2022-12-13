@@ -1,5 +1,5 @@
 import { useRouter } from "next/router"
-import { useEffect, useState } from "react"
+import useSWR from "swr"
 
 import BreadCrumb from "../components/breadcrumb"
 import Layout from "../components/layout"
@@ -15,57 +15,63 @@ export default function Home() {
   const router = useRouter()
   const id = router.query.id as string
 
-  const [tasks, setTasks] = useState<Task[]>([])
-  const [folders, setFolders] = useState<Folder[]>([])
+  const {
+    data: folderData,
+    error: folderError,
+    isLoading: folderIsLoading,
+    mutate: folderMutate,
+  } = useSWR("fetchFolders", () =>
+    errorHandler(async () => await requestHelper.getMy<Folder>("folders"))
+  )
 
-  const fetchTasks = () => {
-    errorHandler(async () => {
-      const data = await requestHelper.getMy<Task>("tasks")
-      setTasks(data)
-    })
-  }
-  const fetchFolders = () => {
-    errorHandler(async () => {
-      const data = await requestHelper.getMy<Folder>("folders")
-      setFolders(data)
-    })
-  }
+  const {
+    data: taskData,
+    error: taskError,
+    isLoading: taskIsLoading,
+    mutate: taskMutate,
+  } = useSWR("fetchTasks", () =>
+    errorHandler(async () => await requestHelper.getMy<Task>("tasks"))
+  )
 
-  useEffect(() => {
-    fetchFolders()
-    fetchTasks()
-  }, [])
+  const error = folderError || taskError
+
+  const isLoading = folderIsLoading || taskIsLoading
 
   return (
-    <Layout fetchTasks={fetchTasks}>
-      <div className="flex h-full w-full flex-col items-center rounded-md px-4 pt-4 pb-2 shadow">
-        {folders.length !== 0 ? (
-          <BreadCrumb
-            className="mb-4"
-            path={[
-              ...FolderHelper.findDeepParents(folders, id).reverse(),
-              FolderHelper.findFolder(folders, id),
-            ].map((folder) => {
-              return {
-                label: folder.title,
-                path: FolderHelper.isSame(folder, id)
-                  ? undefined
-                  : `/${folder.id}`,
-              }
-            })}
-          />
-        ) : null}
-        {tasks.length !== 0 ? (
-          <div className="h-full w-full overflow-y-auto">
-            <TaskGrid
-              tasks={tasks.filter((task) => task.folderId === id)}
-              fetchTasks={fetchTasks}
+    <Layout fetchFolders={folderMutate} fetchTasks={taskMutate}>
+      {!error ? (
+        !isLoading && folderData && taskData ? (
+          <div className="flex h-full w-full flex-col items-center rounded-md px-4 pt-4 pb-2 shadow">
+            <BreadCrumb
+              className="mb-4"
+              path={[
+                ...FolderHelper.findDeepParents(folderData, id).reverse(),
+                FolderHelper.findFolder(folderData, id),
+              ].map((folder) => {
+                return {
+                  label: folder.title,
+                  path: FolderHelper.isSame(folder, id)
+                    ? undefined
+                    : `/${folder.id}`,
+                }
+              })}
             />
+
+            <div className="h-full w-full overflow-y-auto">
+              <TaskGrid
+                tasks={(taskData as Task[]).filter(
+                  (task) => task.folderId === id
+                )}
+                fetchTasks={taskMutate}
+              />
+            </div>
           </div>
         ) : (
           <Spinner />
-        )}
-      </div>
+        )
+      ) : (
+        <div>Something went wrong.</div>
+      )}
     </Layout>
   )
 }

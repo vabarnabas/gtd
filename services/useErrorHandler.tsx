@@ -11,7 +11,7 @@ export const useErrorHandler = () => {
       options?: { log?: boolean; customToastProps?: ToastProps }
     ) => {
       try {
-        await callbackFn()
+        return await callbackFn()
       } catch (e) {
         if (options?.log) console.log(e)
         {
