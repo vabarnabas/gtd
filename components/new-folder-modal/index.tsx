@@ -1,8 +1,10 @@
 import { Listbox, Transition } from "@headlessui/react"
+import { yupResolver } from "@hookform/resolvers/yup"
 import clsx from "clsx"
 import React, { Fragment, useEffect, useState } from "react"
 import { FormProvider, useForm } from "react-hook-form"
 import { HiOutlineChevronDown } from "react-icons/hi"
+import * as yup from "yup"
 
 import { useToast } from "../../providers/toast.provider"
 import { requestHelper } from "../../services/requestHelper"
@@ -48,6 +50,10 @@ export default function NewFolderModal({ isOpen, fetchFolders }: Props) {
     parentId: "",
   }
 
+  const schema = yup.object().shape({
+    title: yup.string().required("Required Field"),
+  })
+
   // const schema = z.object({
   //   title: z.string().min(1, "Required Field"),
   // })
@@ -55,6 +61,7 @@ export default function NewFolderModal({ isOpen, fetchFolders }: Props) {
   const form = useForm<FormValues>({
     defaultValues,
     // resolver: zodResolver(schema),
+    resolver: yupResolver(schema),
   })
   const {
     register,
