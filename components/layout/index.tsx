@@ -1,6 +1,8 @@
 import Head from "next/head"
 
 import useModalStore from "../../store/modal.store"
+import ChangePasswordModal from "../change-password-modal"
+import ConfirmModal from "../confirm-modal"
 import Navbar from "../navbar"
 import Toast from "../toast"
 import ToastHandler from "../toast/toast-handler"
@@ -25,7 +27,7 @@ export default function Layout({ children, fetchTasks, fetchFolders }: Props) {
       <Navbar />
       <ToastHandler position="topRight" toastComponent={Toast} />
       <div className="h-full w-full pt-12">{children}</div>
-      {/* {currentModal.modal === "confirm" && currentModal.action ? (
+      {currentModal.modal === "confirm" && currentModal.action ? (
         <ConfirmModal isOpen={currentModal.modal === "confirm"} />
       ) : null}
       {currentModal.modal === "change-password" ? (
@@ -33,6 +35,7 @@ export default function Layout({ children, fetchTasks, fetchFolders }: Props) {
           isOpen={currentModal.modal === "change-password"}
         />
       ) : null}
+      {/* 
       {currentModal.modal === "change-folder" &&
       currentModal.id !== undefined ? (
         <ChangeFolderModal
