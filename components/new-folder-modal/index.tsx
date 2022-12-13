@@ -1,10 +1,8 @@
 import { Listbox, Transition } from "@headlessui/react"
-import { zodResolver } from "@hookform/resolvers/zod"
 import clsx from "clsx"
 import React, { Fragment, useEffect, useState } from "react"
 import { FormProvider, useForm } from "react-hook-form"
 import { HiOutlineChevronDown } from "react-icons/hi"
-import { z } from "zod"
 
 import { useToast } from "../../providers/toast.provider"
 import { requestHelper } from "../../services/requestHelper"
@@ -50,13 +48,13 @@ export default function NewFolderModal({ isOpen, fetchFolders }: Props) {
     parentId: "",
   }
 
-  const schema = z.object({
-    title: z.string().min(1, "Required Field"),
-  })
+  // const schema = z.object({
+  //   title: z.string().min(1, "Required Field"),
+  // })
 
   const form = useForm<FormValues>({
     defaultValues,
-    resolver: zodResolver(schema),
+    // resolver: zodResolver(schema),
   })
   const {
     register,
