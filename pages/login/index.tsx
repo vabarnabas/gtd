@@ -1,5 +1,7 @@
+import { yupResolver } from "@hookform/resolvers/yup"
 import { useRouter } from "next/router"
 import { FormProvider, useForm } from "react-hook-form"
+import * as yup from "yup"
 
 import { requestHelper } from "../../services/requestHelper"
 import TokenService from "../../services/token.service"
@@ -12,8 +14,18 @@ interface FormValues {
 
 export default function Login() {
   const { errorHandler } = useErrorHandler()
-  const form = useForm<FormValues>()
-  const { handleSubmit, register } = form
+  const schema = yup.object().shape({
+    email: yup.string().email("Not a Valid E-mail").required("Required Field"),
+    password: yup.string().required("Required Field"),
+  })
+
+  const form = useForm<FormValues>({ resolver: yupResolver(schema) })
+  const {
+    handleSubmit,
+    register,
+    formState: { errors },
+  } = form
+
   const router = useRouter()
   const tokenservice = new TokenService()
 
@@ -33,12 +45,19 @@ export default function Login() {
           className="flex flex-col space-y-3"
         >
           <p className="text-xl font-bold">Login</p>
-          <input
-            type="text"
-            placeholder="E-mail"
-            {...register("email")}
-            className="rounded-md bg-gray-100 py-1 px-3 outline-none"
-          />
+          <div className="">
+            <input
+              type="text"
+              placeholder="E-mail"
+              {...register("email")}
+              className="rounded-md bg-gray-100 py-1 px-3 outline-none"
+            />
+            {errors.email?.message && (
+              <p className="mt-0.5 pl-2 text-xs text-rose-500">
+                {errors.email.message}
+              </p>
+            )}
+          </div>
           <input
             type="password"
             placeholder="Password"
