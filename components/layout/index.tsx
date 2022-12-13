@@ -6,6 +6,7 @@ import ChangePasswordModal from "../change-password-modal"
 import ConfirmModal from "../confirm-modal"
 import Navbar from "../navbar"
 import NewFolderModal from "../new-folder-modal"
+import NewSubtaskModal from "../new-subtask-modal"
 import NewTaskModal from "../new-task-modal"
 import Toast from "../toast"
 import ToastHandler from "../toast/toast-handler"
@@ -54,23 +55,14 @@ export default function Layout({ children, fetchTasks, fetchFolders }: Props) {
       {currentModal.modal === "new-folder" ? (
         <NewFolderModal isOpen={currentModal.modal === "new-folder"} />
       ) : null}
-      {/* 
-      
-      {currentModal.modal === "new-folder" ? (
-        <NewFolderModal
-          fetchFolders={fetchFolders && fetchFolders}
-          isOpen={currentModal.modal === "new-folder"}
-        />
-      ) : null}
       {currentModal.modal === "new-subtask" && currentModal.id !== undefined ? (
         <NewSubtaskModal
-          fetchTasks={fetchTasks && fetchTasks}
           isOpen={
             currentModal.modal === "new-subtask" &&
             currentModal.id !== undefined
           }
         />
-      ) : null} */}
+      ) : null}
     </div>
   )
 }
