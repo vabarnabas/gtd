@@ -4,6 +4,7 @@ import useModalStore from "../../store/modal.store"
 import ChangeFolderModal from "../change-folder-modal"
 import ConfirmModal from "../confirm-modal"
 import Navbar from "../navbar"
+import NewTaskModal from "../new-task-modal"
 import Toast from "../toast"
 import ToastHandler from "../toast/toast-handler"
 
@@ -44,17 +45,10 @@ export default function Layout({ children, fetchTasks, fetchFolders }: Props) {
           }
         />
       ) : null}
-      {/* 
-      {currentModal.modal === "change-folder" &&
-      currentModal.id !== undefined ? (
-        <ChangeFolderModal
-          fetchTasks={fetchTasks && fetchTasks}
-          isOpen={
-            currentModal.modal === "change-folder" &&
-            currentModal.id !== undefined
-          }
-        />
+      {currentModal.modal === "new-task" ? (
+        <NewTaskModal isOpen={currentModal.modal === "new-task"} />
       ) : null}
+      {/* 
       {currentModal.modal === "new-task" ? (
         <NewTaskModal
           fetchTasks={fetchTasks && fetchTasks}
