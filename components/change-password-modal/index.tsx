@@ -1,8 +1,8 @@
-import { zodResolver } from "@hookform/resolvers/zod"
+import { yupResolver } from "@hookform/resolvers/yup"
 import { useRouter } from "next/router"
 import React from "react"
 import { FormProvider, useForm } from "react-hook-form"
-import { z } from "zod"
+import * as yup from "yup"
 
 import { useToast } from "../../providers/toast.provider"
 import { requestHelper } from "../../services/requestHelper"
@@ -30,24 +30,14 @@ export default function ChangePasswordModal({ isOpen }: Props) {
 
   const { createToast } = useToast()
 
-  const schema = z
-    .object({
-      oldPassword: z.string().min(1, "Required Field"),
-      password: z.string().min(1, "Required Field"),
-      passwordAgain: z.string().min(1, "Required Field"),
-    })
-    .superRefine(({ password, passwordAgain }, ctx) => {
-      if (password !== passwordAgain) {
-        ctx.addIssue({
-          code: "custom",
-          message: "The Passwords did not Match",
-          path: ["passwordAgain"],
-        })
-      }
-    })
+  const schema = yup.object().shape({
+    oldPassword: yup.string().required("Required Field"),
+    password: yup.string().required("Required Field"),
+    passwordAgain: yup.string().required("Required Field"),
+  })
 
   const form = useForm<FormValues>({
-    resolver: zodResolver(schema),
+    resolver: yupResolver(schema),
   })
   const {
     register,

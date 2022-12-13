@@ -2,6 +2,7 @@ import Head from "next/head"
 
 import useModalStore from "../../store/modal.store"
 import ChangeFolderModal from "../change-folder-modal"
+import ChangePasswordModal from "../change-password-modal"
 import ConfirmModal from "../confirm-modal"
 import Navbar from "../navbar"
 import NewFolderModal from "../new-folder-modal"
@@ -31,11 +32,11 @@ export default function Layout({ children, fetchTasks, fetchFolders }: Props) {
       {currentModal.modal === "confirm" && currentModal.action ? (
         <ConfirmModal isOpen={currentModal.modal === "confirm"} />
       ) : null}
-      {/* {currentModal.modal === "change-password" ? (
+      {currentModal.modal === "change-password" ? (
         <ChangePasswordModal
           isOpen={currentModal.modal === "change-password"}
         />
-      ) : null} */}
+      ) : null}
       {currentModal.modal === "change-folder" &&
       currentModal.id !== undefined ? (
         <ChangeFolderModal
