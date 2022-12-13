@@ -1,5 +1,5 @@
 import { useRouter } from "next/router"
-import { useForm } from "react-hook-form"
+import { FormProvider, useForm } from "react-hook-form"
 
 import { requestHelper } from "../../services/requestHelper"
 import TokenService from "../../services/token.service"
@@ -20,7 +20,6 @@ export default function Login() {
   const login = (data: FormValues) => {
     errorHandler(async () => {
       const token = await requestHelper.login(data.email, data.password)
-      alert(token.access_token)
       await tokenservice.saveToken(token.access_token)
       router.push("/")
     })
@@ -28,24 +27,26 @@ export default function Login() {
 
   return (
     <div className="flex h-screen w-screen items-center justify-center bg-gray-50">
-      <form
-        onSubmit={handleSubmit((data) => login(data))}
-        className="space-y-3"
-      >
-        <input
-          type="text"
-          {...register("email")}
-          className="w-full rounded-md bg-gray-100 py-1 px-3 outline-none"
-        />
-        <input
-          type="text"
-          {...register("password")}
-          className="w-full rounded-md bg-gray-100 py-1 px-3 outline-none"
-        />
-        <button className="w-full rounded-md bg-blue-500 px-2 py-1 text-white hover:bg-blue-600">
-          Create
-        </button>
-      </form>
+      <FormProvider {...form}>
+        <form
+          onSubmit={handleSubmit((data) => login(data))}
+          className="space-y-3"
+        >
+          <input
+            type="text"
+            {...register("email")}
+            className="w-full rounded-md bg-gray-100 py-1 px-3 outline-none"
+          />
+          <input
+            type="text"
+            {...register("password")}
+            className="w-full rounded-md bg-gray-100 py-1 px-3 outline-none"
+          />
+          <button className="w-full rounded-md bg-blue-500 px-2 py-1 text-white hover:bg-blue-600">
+            Create
+          </button>
+        </form>
+      </FormProvider>
     </div>
   )
 }
