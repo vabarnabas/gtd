@@ -30,19 +30,22 @@ export default function Login() {
       <FormProvider {...form}>
         <form
           onSubmit={handleSubmit((data) => login(data))}
-          className="space-y-3"
+          className="flex flex-col space-y-3"
         >
+          <p className="text-xl font-bold">Login</p>
           <input
             type="text"
+            placeholder="E-mail"
             {...register("email")}
-            className="w-full rounded-md bg-gray-100 py-1 px-3 outline-none"
+            className="rounded-md bg-gray-100 py-1 px-3 outline-none"
           />
           <input
-            type="text"
+            type="password"
+            placeholder="Password"
             {...register("password")}
-            className="w-full rounded-md bg-gray-100 py-1 px-3 outline-none"
+            className="rounded-md bg-gray-100 py-1 px-3 outline-none"
           />
-          <button className="w-full rounded-md bg-blue-500 px-2 py-1 text-white hover:bg-blue-600">
+          <button className="rounded-md bg-blue-500 px-2 py-1 text-white hover:bg-blue-600">
             Create
           </button>
         </form>
