@@ -67,7 +67,8 @@ export default function FolderOptionsModal({ isOpen, fetchFolders }: Props) {
       foldersData &&
       !isLoading &&
       data &&
-      currentModal.id
+      currentModal.id &&
+      FolderHelper.findParent(foldersData, currentModal.id)
     ) {
       setSelectedFolder(FolderHelper.findParent(foldersData, currentModal.id))
     }
