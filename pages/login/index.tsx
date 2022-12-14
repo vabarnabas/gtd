@@ -90,7 +90,7 @@ export default function Login() {
         New to the platform?{" "}
         <span
           onClick={() => {
-            router.push("/regiser")
+            router.push("/register")
           }}
           className="cursor-pointer text-blue-500 hover:underline"
         >
