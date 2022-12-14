@@ -45,7 +45,7 @@ export default function TaskModal({ isOpen }: Props) {
       {!error ? (
         !isLoading && data ? (
           <div className="w-full">
-            <div className="prose mt-3 max-h-[512px] w-full select-text flex-col overflow-x-hidden text-sm scrollbar-hide prose-a:text-blue-500 prose-code:h-max">
+            <div className="prose max-h-[512px] w-full select-text flex-col overflow-x-hidden text-sm scrollbar-hide prose-a:text-blue-500 prose-code:h-max">
               <Marked>{data.description}</Marked>
             </div>
             {/* <CustomButton style={ButtonStyle.BASE_PRIMARY} text="a" /> */}

@@ -201,7 +201,7 @@ export default function NewTaskModal({ isOpen, fetchTasks }: Props) {
             <CustomListbox
               value={selectedStatus}
               onChange={(e) => {
-                setValue("status", e.name)
+                setValue("status", e.title)
                 setSelectedStatus(e)
               }}
               icon={<BiCheckbox />}
