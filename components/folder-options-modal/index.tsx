@@ -228,8 +228,8 @@ export default function FolderOptionsModal({ isOpen, fetchFolders }: Props) {
                           "folders",
                           currentModal.id as string
                         )
-                        closeModal()
                         router.push("/")
+                        closeModal()
                         fetchFolders && (await fetchFolders())
                         createToast({
                           title: "Success.",

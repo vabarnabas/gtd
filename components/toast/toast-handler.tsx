@@ -18,9 +18,9 @@ export default function ToastHandler({
 
   return (
     <div
-      className={clsx("fixed top-0 z-50 space-y-2 p-2", {
-        "left-0": position === "topLeft",
-        "right-0": position === "topRight",
+      className={clsx("fixed top-0 z-50 m-2 space-y-2", {
+        "left-2": position === "topLeft",
+        "right-2": position === "topRight",
       })}
     >
       {toastQueue.map((toast) => (
