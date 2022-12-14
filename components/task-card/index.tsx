@@ -1,5 +1,6 @@
 import { Listbox, Menu, Transition } from "@headlessui/react"
 import clsx from "clsx"
+import Marked from "marked-react"
 import { Fragment, useState } from "react"
 import { BiDotsVerticalRounded } from "react-icons/bi"
 import { HiOutlineChevronDown } from "react-icons/hi"
@@ -122,9 +123,9 @@ export default function TaskCard({
           </Transition>
         </div>
       </Menu>
-      <p className="mt-3 h-20 min-w-full overflow-y-auto text-sm">
-        {description}
-      </p>
+      <div className="prose mt-3 h-20 min-w-full overflow-y-auto text-sm prose-a:text-blue-500">
+        <Marked>{description}</Marked>
+      </div>
       <div className="mt-4 flex flex-wrap items-center justify-between gap-x-2 gap-y-2 text-sm">
         <button className="rounded-md bg-blue-500 px-2 py-1 text-white hover:bg-blue-600">
           Open
