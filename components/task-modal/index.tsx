@@ -23,32 +23,13 @@ interface FormValues {
   parentId: string | null
 }
 
-export default function TaskModal({ isOpen, fetchTasks }: Props) {
+export default function TaskModal({ isOpen }: Props) {
   const currentModal = useModalStore((state) => state.currentModal)
   const closeModal = useModalStore((state) => state.closeModal)
   const { errorHandler } = useErrorHandler()
 
-  // const itemStates = [
-  //   {
-  //     name: "To Do",
-  //     className: "bg-gray-100 text-gray-500",
-  //   },
-  //   {
-  //     name: "In Progress",
-  //     className: "bg-blue-100 text-blue-500",
-  //   },
-  //   {
-  //     name: "Done",
-  //     className: "bg-green-100 text-green-500",
-  //   },
-  //   {
-  //     name: "Closed",
-  //     className: "bg-rose-100 text-rose-500",
-  //   },
-  // ]
-
-  const { data: taskData, isLoading: taskIsLoading } = useSWR(
-    "getTask",
+  const { data, error, isLoading, isValidating } = useSWR(
+    `tasks/${currentModal.id}`,
     () =>
       errorHandler(
         async () =>
@@ -56,22 +37,24 @@ export default function TaskModal({ isOpen, fetchTasks }: Props) {
             "tasks",
             currentModal.id as string
           )
-      ),
-    { keepPreviousData: false, revalidateIfStale: true }
+      )
   )
-
-  console.log(taskData)
 
   return (
     <BaseModal title="" isOpen={isOpen} onClose={closeModal}>
-      {!taskIsLoading && taskData ? (
-        <div className="flex w-full">
-          <div className="prose mt-3 max-h-[512px] w-full select-text flex-col overflow-x-hidden text-sm scrollbar-hide prose-a:text-blue-500 prose-code:h-max">
-            <Marked>{taskData.description}</Marked>
+      {!error ? (
+        !isLoading && data ? (
+          <div className="w-full">
+            <div className="prose mt-3 max-h-[512px] w-full select-text flex-col overflow-x-hidden text-sm scrollbar-hide prose-a:text-blue-500 prose-code:h-max">
+              <Marked>{data.description}</Marked>
+            </div>
+            {/* <CustomButton style={ButtonStyle.BASE_PRIMARY} text="a" /> */}
           </div>
-        </div>
+        ) : (
+          <Spinner />
+        )
       ) : (
-        <Spinner />
+        <div className="">Something went wrong.</div>
       )}
     </BaseModal>
   )

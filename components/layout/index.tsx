@@ -63,10 +63,8 @@ export default function Layout({ children, fetchTasks, fetchFolders }: Props) {
           isOpen={currentModal.modal === "new-folder"}
         />
       ) : null}
-
       {currentModal.modal === "task" && currentModal.id !== undefined ? (
         <TaskModal
-          fetchTasks={fetchTasks && fetchTasks}
           isOpen={
             currentModal.modal === "task" && currentModal.id !== undefined
           }

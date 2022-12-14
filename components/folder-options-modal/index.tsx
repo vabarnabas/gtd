@@ -93,8 +93,6 @@ export default function FolderOptionsModal({ isOpen, fetchFolders }: Props) {
     formState: { errors },
   } = form
 
-  console.log(data)
-
   return (
     <BaseModal title="Folder Options" isOpen={isOpen} onClose={closeModal}>
       {!error || !foldersError ? (
