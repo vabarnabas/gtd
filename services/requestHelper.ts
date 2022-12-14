@@ -105,6 +105,21 @@ export const requestHelper = {
 
     return response
   },
+  async register(
+    displayName: string,
+    identifier: string,
+    password: string
+  ): Promise<Token> {
+    const response = await makeRequest("POST", {
+      baseUrl: process.env.NEXT_PUBLIC_API_URL as string,
+      path: "auth/local/register",
+      body: JSON.stringify({ email: identifier, password, displayName }),
+    })
+
+    if (response?.statusCode) throw new Error()
+
+    return response
+  },
   async currentUser(): Promise<User> {
     const response = await makeRequest("GET", {
       baseUrl: process.env.NEXT_PUBLIC_API_URL as string,
