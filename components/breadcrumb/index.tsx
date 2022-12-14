@@ -18,7 +18,7 @@ export default function BreadCrumb({ path, className }: Props) {
 
   return (
     <ScrollContainer
-      className={clsx("flex w-full items-center space-x-1 text-sm", className)}
+      className={clsx("flex items-center space-x-1 text-sm", className)}
     >
       <div className="flex items-center text-blue-500">
         <FaHome className="cursor-pointer" onClick={() => router.push("/")} />
@@ -31,7 +31,7 @@ export default function BreadCrumb({ path, className }: Props) {
           className="flex items-center"
         >
           <p
-            className={clsx("", {
+            className={clsx("break-keep", {
               "cursor-pointer text-blue-500 hover:underline":
                 item.path !== undefined,
               "cursor-default": item.path === undefined,

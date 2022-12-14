@@ -136,6 +136,7 @@ export default function NewTaskModal({ isOpen, fetchTasks }: Props) {
             </div>
             <div className="">
               <textarea
+                rows={5}
                 className="w-full resize-none rounded-md bg-gray-100 py-1 px-3 outline-none"
                 {...register("description")}
                 placeholder="Description"

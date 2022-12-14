@@ -1,12 +1,13 @@
 import { Listbox, Transition } from "@headlessui/react"
 import { yupResolver } from "@hookform/resolvers/yup"
 import clsx from "clsx"
-import React, { Fragment, useState } from "react"
+import React, { Fragment, useEffect, useState } from "react"
 import { FormProvider, useForm } from "react-hook-form"
 import { HiOutlineChevronDown } from "react-icons/hi"
 import useSWR from "swr"
 import * as yup from "yup"
 
+import { FolderHelper } from "../../helpers/FolderHelper"
 import { useToast } from "../../providers/toast.provider"
 import { requestHelper } from "../../services/requestHelper"
 import { useErrorHandler } from "../../services/useErrorHandler"
@@ -27,18 +28,28 @@ interface FormValues {
 }
 
 export default function NewFolderModal({ isOpen, fetchFolders }: Props) {
+  const currentModal = useModalStore((state) => state.currentModal)
   const closeModal = useModalStore((state) => state.closeModal)
   const { errorHandler } = useErrorHandler()
 
-  const [selectedFolder, setSelectedFolder] = useState({
-    id: null,
+  const [selectedFolder, setSelectedFolder] = useState<Folder>({
+    id: "",
     title: "No Parent",
+    createdAt: new Date(Date.now()),
+    userId: "",
+    parentId: null,
   })
   const { createToast } = useToast()
 
   const { data, error, isLoading } = useSWR("fetchFolders", () =>
     errorHandler(async () => await requestHelper.getMy<Folder>("folders"))
   )
+
+  useEffect(() => {
+    if (!isLoading && data && currentModal.id) {
+      setSelectedFolder(FolderHelper.findFolder(data, currentModal.id))
+    }
+  }, [isLoading, data, currentModal])
 
   const defaultValues: FormValues = {
     title: "",
@@ -68,7 +79,7 @@ export default function NewFolderModal({ isOpen, fetchFolders }: Props) {
       await requestHelper.create<Folder>("folders", {
         ...data,
         userId: user.id,
-        parentId: selectedFolder.id,
+        parentId: selectedFolder?.id === "" ? null : selectedFolder.id,
       })
       fetchFolders && (await fetchFolders())
       closeModal()

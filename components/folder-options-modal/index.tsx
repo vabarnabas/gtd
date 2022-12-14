@@ -8,6 +8,7 @@ import { HiOutlineChevronDown } from "react-icons/hi"
 import useSWR from "swr"
 import * as yup from "yup"
 
+import { FolderHelper } from "../../helpers/FolderHelper"
 import { useToast } from "../../providers/toast.provider"
 import { requestHelper } from "../../services/requestHelper"
 import { useErrorHandler } from "../../services/useErrorHandler"
@@ -62,17 +63,15 @@ export default function FolderOptionsModal({ isOpen, fetchFolders }: Props) {
 
   useEffect(() => {
     if (
-      !isLoading &&
-      data &&
       !foldersIsLoading &&
       foldersData &&
-      (data as Folder).parentId
+      !isLoading &&
+      data &&
+      currentModal.id
     ) {
-      setSelectedFolder(
-        (foldersData as Folder[]).filter((folder) => folder.id)[0]
-      )
+      setSelectedFolder(FolderHelper.findParent(foldersData, currentModal.id))
     }
-  }, [])
+  }, [isLoading, data, currentModal, foldersData, foldersIsLoading])
 
   const defaultValues: FormValues = {
     parentId: "",
@@ -190,7 +189,7 @@ export default function FolderOptionsModal({ isOpen, fetchFolders }: Props) {
                 </div>
               </Listbox>
             </div>
-            <div className="flex gap-x-3">
+            <div className="flex flex-col gap-y-3">
               <button
                 onClick={async () => {
                   errorHandler(async () => {
@@ -211,31 +210,41 @@ export default function FolderOptionsModal({ isOpen, fetchFolders }: Props) {
               >
                 Update Folder
               </button>
-              <button
-                onClick={() =>
-                  openModal({
-                    modal: "confirm",
-                    action: async () => {
-                      await requestHelper.delete<Folder>(
-                        "folders",
-                        currentModal.id as string
-                      )
-                      closeModal()
-                      router.push("/")
-                      fetchFolders && (await fetchFolders())
-                      createToast({
-                        title: "Success.",
-                        subtitle: "You have successfully deleted the folder.",
-                        expiration: 10000,
-                        type: "success",
-                      })
-                    },
-                  })
-                }
-                className="w-full rounded-md bg-rose-500 px-2 py-1 text-white outline-none hover:bg-rose-600"
-              >
-                Delete Folder
-              </button>
+              <div className="flex gap-x-3">
+                <button
+                  onClick={async () => {
+                    openModal({ modal: "new-folder", id: currentModal.id })
+                  }}
+                  className="w-full rounded-md bg-blue-500 px-2 py-1 text-white outline-none hover:bg-blue-600"
+                >
+                  Create Subfolder
+                </button>
+                <button
+                  onClick={() =>
+                    openModal({
+                      modal: "confirm",
+                      action: async () => {
+                        await requestHelper.delete<Folder>(
+                          "folders",
+                          currentModal.id as string
+                        )
+                        closeModal()
+                        router.push("/")
+                        fetchFolders && (await fetchFolders())
+                        createToast({
+                          title: "Success.",
+                          subtitle: "You have successfully deleted the folder.",
+                          expiration: 10000,
+                          type: "success",
+                        })
+                      },
+                    })
+                  }
+                  className="bg:text-rose-600 w-full rounded-md bg-rose-500 px-2  py-1 text-white outline-none"
+                >
+                  Delete Folder
+                </button>
+              </div>
             </div>
           </div>
         ) : (

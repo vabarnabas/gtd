@@ -44,7 +44,7 @@ export default function Home() {
       {!error ? (
         !isLoading && folderData && taskData ? (
           <div className="flex h-full w-full flex-col items-center rounded-md px-6 pt-4 pb-2 shadow">
-            <div className="mb-4 flex w-full items-center justify-center gap-x-4">
+            <div className="mb-4 flex w-full items-center justify-between gap-x-4">
               <BreadCrumb
                 path={[
                   ...FolderHelper.findDeepParents(
@@ -65,7 +65,7 @@ export default function Home() {
                 onClick={() => {
                   openModal({ modal: "folder-options", id })
                 }}
-                className="cursor-pointer text-sm text-blue-500 hover:text-blue-600 hover:underline"
+                className="w-min cursor-pointer text-sm text-blue-500 hover:text-blue-600 hover:underline"
               >
                 Options
               </p>

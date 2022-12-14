@@ -6,6 +6,7 @@ import { HiFolder } from "react-icons/hi"
 
 import { FolderHelper } from "../../helpers/FolderHelper"
 import { Folder } from "../../types/prisma.types"
+import TextPath from "../text-path"
 
 interface Props {
   folders: Folder[]
@@ -35,12 +36,20 @@ export default function FolderRow({ folder, folders }: Props) {
         ) : (
           <HiFolder />
         )}
-        <p className="ml-1.5">{folder.title}</p>
+        <div className="ml-1.5">
+          <TextPath
+            array={[
+              ...FolderHelper.findDeepParents(folders, folder.id).reverse(),
+              FolderHelper.findFolder(folders, folder.id),
+            ].map((folder) => folder.title)}
+            className=""
+          />
+        </div>
         {/* <div className="ml-auto rounded-md bg-blue-500 py-1 px-2 text-white hover:bg-blue-600">
           <HiPlus className="text-sm" />
         </div> */}
       </div>
-      <div className="pl-4">
+      <div className="pl-2">
         {FolderHelper.findChildren(folders, folder.id).length !== 0
           ? FolderHelper.findChildren(folders, folder.id).map((subFolder) => (
               <FolderRow
