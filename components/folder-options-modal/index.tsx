@@ -154,35 +154,37 @@ export default function FolderOptionsModal({ isOpen, fetchFolders }: Props) {
                           </>
                         )}
                       </Listbox.Option>
-                      {(foldersData as Folder[]).map((folder, stateIdx) => (
-                        <Listbox.Option
-                          key={stateIdx}
-                          className={({ active }) =>
-                            clsx(
-                              "relative cursor-pointer select-none rounded-md py-1 px-1",
-                              active ? "bg-blue-500 text-white" : null
-                            )
-                          }
-                          value={folder}
-                        >
-                          {({ selected }) => (
-                            <>
-                              <span
-                                className={`block truncate ${
-                                  selected ? "font-medium" : "font-normal"
-                                }`}
-                              >
-                                {folder.title}
-                              </span>
-                              {selected ? (
-                                <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-600">
-                                  {/* <CheckIcon className="h-5 w-5" aria-hidden="true" /> */}
+                      {(foldersData as Folder[])
+                        .filter((folder) => folder.id !== currentModal.id)
+                        .map((folder, stateIdx) => (
+                          <Listbox.Option
+                            key={stateIdx}
+                            className={({ active }) =>
+                              clsx(
+                                "relative cursor-pointer select-none rounded-md py-1 px-1",
+                                active ? "bg-blue-500 text-white" : null
+                              )
+                            }
+                            value={folder}
+                          >
+                            {({ selected }) => (
+                              <>
+                                <span
+                                  className={`block truncate ${
+                                    selected ? "font-medium" : "font-normal"
+                                  }`}
+                                >
+                                  {folder.title}
                                 </span>
-                              ) : null}
-                            </>
-                          )}
-                        </Listbox.Option>
-                      ))}
+                                {selected ? (
+                                  <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-600">
+                                    {/* <CheckIcon className="h-5 w-5" aria-hidden="true" /> */}
+                                  </span>
+                                ) : null}
+                              </>
+                            )}
+                          </Listbox.Option>
+                        ))}
                     </Listbox.Options>
                   </Transition>
                 </div>
