@@ -2,7 +2,7 @@ import { Dialog, Transition } from "@headlessui/react"
 import { Fragment } from "react"
 
 interface Props {
-  title: string
+  title?: string
   children: JSX.Element
   isOpen: boolean
   onClose: () => void
@@ -37,9 +37,11 @@ export default function BaseModal({ children, isOpen, onClose, title }: Props) {
               leaveTo="opacity-0 scale-95"
             >
               <Dialog.Panel className="mx-4 w-full max-w-md transform rounded-2xl bg-white p-4 text-left align-middle text-gray-700 shadow-xl transition-all">
-                <Dialog.Title className="text mb-3 text-lg font-bold">
-                  {title}
-                </Dialog.Title>
+                {title ? (
+                  <Dialog.Title className="text mb-3 text-lg font-bold">
+                    {title}
+                  </Dialog.Title>
+                ) : null}
                 <div className="flex h-full min-h-[80px] w-full items-center justify-center text-gray-700">
                   {children}
                 </div>

@@ -40,7 +40,7 @@ export default function FolderRow({ folder, folders }: Props) {
           <HiPlus className="text-sm" />
         </div> */}
       </div>
-      <div className="pl-2">
+      <div className="pl-4">
         {FolderHelper.findChildren(folders, folder.id).length !== 0
           ? FolderHelper.findChildren(folders, folder.id).map((subFolder) => (
               <FolderRow

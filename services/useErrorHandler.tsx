@@ -7,7 +7,7 @@ export const useErrorHandler = () => {
 
   const errorHandler = useCallback(
     async (
-      callbackFn: (...params: any) => void,
+      callbackFn: (...params: any) => any,
       options?: { log?: boolean; customToastProps?: ToastProps }
     ) => {
       try {

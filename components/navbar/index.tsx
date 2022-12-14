@@ -51,7 +51,7 @@ export default function Navbar() {
       <Menu as="div" className="">
         <div className="relative flex items-center justify-between">
           <Menu.Button className="flex items-center space-x-2 rounded-md bg-gray-200 px-3 py-1 text-sm text-gray-600">
-            <p className="">Options</p>
+            <p className="">Menu</p>
             <HiChevronDown />
           </Menu.Button>
           <Transition

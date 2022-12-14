@@ -41,21 +41,25 @@ export default function Home() {
     <Layout fetchFolders={folderMutate} fetchTasks={taskMutate}>
       {!error ? (
         !isLoading && folderData && taskData ? (
-          <div className="flex h-full w-full flex-col items-center rounded-md px-4 pt-4 pb-2 shadow">
-            <BreadCrumb
-              className="mb-4"
-              path={[
-                ...FolderHelper.findDeepParents(folderData, id).reverse(),
-                FolderHelper.findFolder(folderData, id),
-              ].map((folder) => {
-                return {
-                  label: folder.title,
-                  path: FolderHelper.isSame(folder, id)
-                    ? undefined
-                    : `/${folder.id}`,
-                }
-              })}
-            />
+          <div className="flex h-full w-full flex-col items-center rounded-md px-6 pt-4 pb-2 shadow">
+            <div className="mb-4 flex w-full items-center justify-center gap-x-4">
+              <BreadCrumb
+                path={[
+                  ...FolderHelper.findDeepParents(folderData, id).reverse(),
+                  FolderHelper.findFolder(folderData, id),
+                ].map((folder) => {
+                  return {
+                    label: folder.title,
+                    path: FolderHelper.isSame(folder, id)
+                      ? undefined
+                      : `/${folder.id}`,
+                  }
+                })}
+              />
+              <p className="cursor-pointer text-sm text-blue-500 hover:text-blue-600 hover:underline">
+                Options
+              </p>
+            </div>
 
             <div className="h-full w-full overflow-y-auto">
               <TaskGrid
