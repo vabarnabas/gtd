@@ -24,7 +24,7 @@ export const FolderHelper = {
     return input.filter(
       (folder) =>
         folder.id ===
-        input.filter((subCategory) => subCategory.id === id)[0].parentId
+        input.filter((subfolder) => subfolder.id === id)[0].parentId
     )[0]
   },
   findDeepParents(input: Folder[], id: string) {
@@ -43,10 +43,10 @@ export const FolderHelper = {
     return parents
   },
   findTopLevel(input: Folder[]): Folder[] {
-    return input.filter((category) => category.parentId === null)
+    return input.filter((folder) => folder.parentId === null)
   },
   findChildren(input: Folder[], id: string): Folder[] {
-    return input.filter((category) => category.parentId === id)
+    return input.filter((folder) => folder.parentId === id)
   },
   findDeepChildren(input: Folder[], id: string): Folder[] {
     const children: Folder[] = []

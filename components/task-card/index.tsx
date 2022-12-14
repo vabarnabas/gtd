@@ -34,7 +34,7 @@ export default function TaskCard({
     {
       title: "New Subtask",
       action: () => {
-        openModal({ modal: "new-subtask", id })
+        openModal({ modal: "new-task", secondaryId: id })
       },
     },
     {

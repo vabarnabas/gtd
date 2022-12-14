@@ -3,6 +3,7 @@ import create from "zustand"
 interface Modal {
   modal: string
   id?: string
+  secondaryId?: string
   action?: () => void
 }
 

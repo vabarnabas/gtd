@@ -3,10 +3,13 @@ import { yupResolver } from "@hookform/resolvers/yup"
 import clsx from "clsx"
 import React, { Fragment, useEffect, useState } from "react"
 import { FormProvider, useForm } from "react-hook-form"
-import { HiOutlineChevronDown } from "react-icons/hi"
+import { BiCheckbox } from "react-icons/bi"
+import { HiFolder, HiOutlineChevronDown } from "react-icons/hi"
+import { TiFlowChildren } from "react-icons/ti"
 import useSWR from "swr"
 import * as yup from "yup"
 
+import { TaskHelper } from "../../helpers/TaskHelper"
 import { useToast } from "../../providers/toast.provider"
 import { requestHelper } from "../../services/requestHelper"
 import { useErrorHandler } from "../../services/useErrorHandler"
@@ -26,6 +29,7 @@ interface FormValues {
   description: string
   status: string
   folderId: string
+  parentId: string | null
 }
 
 export default function NewTaskModal({ isOpen, fetchTasks }: Props) {
@@ -54,11 +58,29 @@ export default function NewTaskModal({ isOpen, fetchTasks }: Props) {
 
   const [selected, setSelected] = useState(itemStates[0])
   const [selectedFolder, setSelectedFolder] = useState<Folder>({} as Folder)
+  const [selectedTask, setSelectedTask] = useState<Task>({
+    id: "",
+    title: "No Parent",
+    parentId: null,
+    userId: "",
+    createdAt: new Date(Date.now()),
+  } as Task)
   const { createToast } = useToast()
 
   const { data, error, isLoading, mutate } = useSWR("fetchFolders", () =>
     errorHandler(async () => await requestHelper.getMy<Folder>("folders"))
   )
+
+  const { data: taskData, isLoading: taskIsLoading } = useSWR(
+    "fetchTasks",
+    () => errorHandler(async () => await requestHelper.getMy<Task>("tasks"))
+  )
+
+  useEffect(() => {
+    if (!taskIsLoading && taskData && currentModal.secondaryId) {
+      setSelectedTask(TaskHelper.findTask(taskData, currentModal.secondaryId))
+    }
+  }, [taskIsLoading, taskData, currentModal])
 
   useEffect(() => {
     if (!isLoading && data) {
@@ -70,13 +92,14 @@ export default function NewTaskModal({ isOpen, fetchTasks }: Props) {
           )
         : setSelectedFolder(data[0])
     }
-  }, [isLoading, data])
+  }, [isLoading, data, currentModal])
 
   const defaultValues: FormValues = {
     title: "",
     description: "",
     status: selected.name,
     folderId: "",
+    parentId: null,
   }
 
   const schema = yup.object().shape({
@@ -105,6 +128,7 @@ export default function NewTaskModal({ isOpen, fetchTasks }: Props) {
         ...data,
         userId: user.id,
         folderId: selectedFolder.id,
+        parentId: selectedTask?.id === "" ? null : selectedTask.id,
       })
       fetchTasks && (await fetchTasks())
       closeModal()
@@ -119,7 +143,7 @@ export default function NewTaskModal({ isOpen, fetchTasks }: Props) {
 
   return (
     <BaseModal title="Create New Task" isOpen={isOpen} onClose={closeModal}>
-      {!isLoading && data ? (
+      {!isLoading && data && !taskIsLoading && taskData ? (
         <FormProvider {...form}>
           <form className="w-full space-y-3" onSubmit={onSubmit}>
             <div className="">
@@ -149,6 +173,99 @@ export default function NewTaskModal({ isOpen, fetchTasks }: Props) {
             </div>
             <div className="">
               <Listbox
+                value={selectedTask}
+                onChange={(e) => {
+                  setValue("parentId", e.title)
+                  setSelectedTask(e)
+                }}
+              >
+                <div className="relative w-full">
+                  <div className="relative flex items-center">
+                    <Listbox.Button
+                      className={clsx(
+                        "cursor-pointers relative w-full rounded-md bg-gray-100 py-1 pl-8 pr-3 text-left focus:outline-none"
+                      )}
+                    >
+                      <span className="flex items-center justify-between truncate text-gray-500">
+                        {selectedTask.title} <HiOutlineChevronDown />
+                      </span>
+                    </Listbox.Button>
+                    <TiFlowChildren className="absolute left-3 text-gray-400" />
+                  </div>
+                  <Transition
+                    as={Fragment}
+                    leave="transition ease-in duration-100"
+                    leaveFrom="opacity-100"
+                    leaveTo="opacity-0"
+                  >
+                    <Listbox.Options className="absolute z-10 mt-1 max-h-40 w-full overflow-auto rounded-md bg-white p-1 py-1 text-sm text-gray-500 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                      <Listbox.Option
+                        className={({ active }) =>
+                          clsx(
+                            "relative cursor-pointer select-none rounded-md py-1 px-1",
+                            active ? "bg-blue-500 text-white" : null
+                          )
+                        }
+                        value={{ id: null, title: "No Parent" }}
+                      >
+                        {({ selected }) => (
+                          <>
+                            <span
+                              className={`block truncate ${
+                                selected ? "font-medium" : "font-normal"
+                              }`}
+                            >
+                              No Parent
+                            </span>
+                            {selected ? (
+                              <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-600">
+                                {/* <CheckIcon className="h-5 w-5" aria-hidden="true" /> */}
+                              </span>
+                            ) : null}
+                          </>
+                        )}
+                      </Listbox.Option>
+                      {(taskData as Task[]).map((task, stateIdx) => (
+                        <Listbox.Option
+                          key={stateIdx}
+                          className={({ active }) =>
+                            clsx(
+                              "relative cursor-pointer select-none rounded-md py-1 px-1",
+                              active ? "bg-blue-500 text-white" : null
+                            )
+                          }
+                          value={task}
+                        >
+                          {({ selected }) => (
+                            <>
+                              <span
+                                className={`block truncate ${
+                                  selected ? "font-medium" : "font-normal"
+                                }`}
+                              >
+                                {task.title}
+                              </span>
+                              {selected ? (
+                                <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-600">
+                                  {/* <CheckIcon className="h-5 w-5" aria-hidden="true" /> */}
+                                </span>
+                              ) : null}
+                            </>
+                          )}
+                        </Listbox.Option>
+                      ))}
+                    </Listbox.Options>
+                  </Transition>
+                </div>
+              </Listbox>
+              {errors.status?.message && (
+                <p className="mt-0.5 pl-2 text-xs text-rose-500">
+                  {errors.status.message}
+                </p>
+              )}
+            </div>
+            <div className="">
+              <Listbox
                 value={selectedFolder}
                 onChange={(e) => {
                   setValue("folderId", e.title)
@@ -156,15 +273,18 @@ export default function NewTaskModal({ isOpen, fetchTasks }: Props) {
                 }}
               >
                 <div className="relative w-full">
-                  <Listbox.Button
-                    className={clsx(
-                      "cursor-pointers relative w-full rounded-md bg-gray-100 py-1 px-3 text-left focus:outline-none"
-                    )}
-                  >
-                    <span className="flex items-center justify-between truncate text-gray-500">
-                      {selectedFolder.title} <HiOutlineChevronDown />
-                    </span>
-                  </Listbox.Button>
+                  <div className="relative flex items-center">
+                    <Listbox.Button
+                      className={clsx(
+                        "cursor-pointers relative w-full rounded-md bg-gray-100 py-1 pl-8 pr-3 text-left focus:outline-none"
+                      )}
+                    >
+                      <span className="flex items-center justify-between truncate text-gray-500">
+                        {selectedFolder.title} <HiOutlineChevronDown />
+                      </span>
+                    </Listbox.Button>
+                    <HiFolder className="absolute left-3 text-gray-400" />
+                  </div>
                   <Transition
                     as={Fragment}
                     leave="transition ease-in duration-100"
@@ -220,16 +340,19 @@ export default function NewTaskModal({ isOpen, fetchTasks }: Props) {
                 }}
               >
                 <div className="relative w-full">
-                  <Listbox.Button
-                    className={clsx(
-                      "cursor-pointers relative w-full rounded-md py-1 px-3 text-left focus:outline-none",
-                      selected.className
-                    )}
-                  >
-                    <span className="flex items-center justify-between truncate">
-                      {selected.name} <HiOutlineChevronDown />
-                    </span>
-                  </Listbox.Button>
+                  <div className="relative flex items-center">
+                    <Listbox.Button
+                      className={clsx(
+                        "cursor-pointers relative w-full rounded-md py-1 pl-8 pr-3 text-left focus:outline-none",
+                        selected.className
+                      )}
+                    >
+                      <span className="flex items-center justify-between truncate">
+                        {selected.name} <HiOutlineChevronDown />
+                      </span>
+                    </Listbox.Button>
+                    <BiCheckbox className="absolute left-3 text-gray-400" />
+                  </div>
                   <Transition
                     as={Fragment}
                     leave="transition ease-in duration-100"
