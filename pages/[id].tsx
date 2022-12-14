@@ -1,4 +1,5 @@
 import { useRouter } from "next/router"
+import { useEffect } from "react"
 import useSWR from "swr"
 
 import BreadCrumb from "../components/breadcrumb"
@@ -8,9 +9,11 @@ import TaskGrid from "../components/task-grid"
 import { FolderHelper } from "../helpers/FolderHelper"
 import { requestHelper } from "../services/requestHelper"
 import { useErrorHandler } from "../services/useErrorHandler"
+import useModalStore from "../store/modal.store"
 import { Folder, Task } from "../types/prisma.types"
 
 export default function Home() {
+  const openModal = useModalStore((state) => state.openModal)
   const { errorHandler } = useErrorHandler()
   const router = useRouter()
   const id = router.query.id as string
@@ -37,16 +40,28 @@ export default function Home() {
 
   const isLoading = folderIsLoading || taskIsLoading
 
+  useEffect(() => {
+    if (!folderIsLoading && folderData && FolderHelper.isIn(folderData, id)) {
+      router.push("/")
+    }
+  }, [folderData, folderIsLoading, id, router])
+
   return (
     <Layout fetchFolders={folderMutate} fetchTasks={taskMutate}>
       {!error ? (
-        !isLoading && folderData && taskData ? (
+        !isLoading &&
+        folderData &&
+        taskData &&
+        !FolderHelper.isIn(folderData, id) ? (
           <div className="flex h-full w-full flex-col items-center rounded-md px-6 pt-4 pb-2 shadow">
             <div className="mb-4 flex w-full items-center justify-center gap-x-4">
               <BreadCrumb
                 path={[
-                  ...FolderHelper.findDeepParents(folderData, id).reverse(),
-                  FolderHelper.findFolder(folderData, id),
+                  ...FolderHelper.findDeepParents(
+                    folderData as Folder[],
+                    id
+                  ).reverse(),
+                  FolderHelper.findFolder(folderData as Folder[], id),
                 ].map((folder) => {
                   return {
                     label: folder.title,
@@ -56,7 +71,12 @@ export default function Home() {
                   }
                 })}
               />
-              <p className="cursor-pointer text-sm text-blue-500 hover:text-blue-600 hover:underline">
+              <p
+                onClick={() => {
+                  openModal({ modal: "folder-options", id })
+                }}
+                className="cursor-pointer text-sm text-blue-500 hover:text-blue-600 hover:underline"
+              >
                 Options
               </p>
             </div>
