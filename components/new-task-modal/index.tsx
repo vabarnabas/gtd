@@ -4,6 +4,7 @@ import clsx from "clsx"
 import React, { Fragment, useEffect, useState } from "react"
 import { FormProvider, useForm } from "react-hook-form"
 import { HiOutlineChevronDown } from "react-icons/hi"
+import useSWR from "swr"
 import * as yup from "yup"
 
 import { useToast } from "../../providers/toast.provider"
@@ -28,6 +29,7 @@ interface FormValues {
 }
 
 export default function NewTaskModal({ isOpen, fetchTasks }: Props) {
+  const currentModal = useModalStore((state) => state.currentModal)
   const closeModal = useModalStore((state) => state.closeModal)
   const { errorHandler } = useErrorHandler()
 
@@ -51,19 +53,24 @@ export default function NewTaskModal({ isOpen, fetchTasks }: Props) {
   ]
 
   const [selected, setSelected] = useState(itemStates[0])
-  const [folders, setFolders] = useState<Folder[]>([])
   const [selectedFolder, setSelectedFolder] = useState<Folder>({} as Folder)
   const { createToast } = useToast()
 
-  useEffect(() => {
-    const getData = async () => {
-      const data = await requestHelper.getMy<Folder>("folders")
-      setSelectedFolder(data[0])
-      setFolders(data)
-    }
+  const { data, error, isLoading, mutate } = useSWR("fetchFolders", () =>
+    errorHandler(async () => await requestHelper.getMy<Folder>("folders"))
+  )
 
-    getData()
-  }, [])
+  useEffect(() => {
+    if (!isLoading && data) {
+      currentModal.id
+        ? setSelectedFolder(
+            (data as Folder[]).filter(
+              (folder) => folder.id === currentModal.id
+            )[0]
+          )
+        : setSelectedFolder(data[0])
+    }
+  }, [isLoading, data])
 
   const defaultValues: FormValues = {
     title: "",
@@ -112,7 +119,7 @@ export default function NewTaskModal({ isOpen, fetchTasks }: Props) {
 
   return (
     <BaseModal title="Create New Task" isOpen={isOpen} onClose={closeModal}>
-      {folders.length !== 0 ? (
+      {!isLoading && data ? (
         <FormProvider {...form}>
           <form className="w-full space-y-3" onSubmit={onSubmit}>
             <div className="">
@@ -164,7 +171,7 @@ export default function NewTaskModal({ isOpen, fetchTasks }: Props) {
                     leaveTo="opacity-0"
                   >
                     <Listbox.Options className="absolute z-10 mt-1 max-h-40 w-full overflow-auto rounded-md bg-white p-1 py-1 text-sm text-gray-500 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                      {folders.map((folder, stateIdx) => (
+                      {(data as Folder[]).map((folder, stateIdx) => (
                         <Listbox.Option
                           key={stateIdx}
                           className={({ active }) =>

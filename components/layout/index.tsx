@@ -4,6 +4,7 @@ import useModalStore from "../../store/modal.store"
 import ChangeFolderModal from "../change-folder-modal"
 import ChangePasswordModal from "../change-password-modal"
 import ConfirmModal from "../confirm-modal"
+import FolderOptionsModal from "../folder-options-modal"
 import Navbar from "../navbar"
 import NewFolderModal from "../new-folder-modal"
 import NewSubtaskModal from "../new-subtask-modal"
@@ -67,6 +68,16 @@ export default function Layout({ children, fetchTasks, fetchFolders }: Props) {
           fetchTasks={fetchTasks && fetchTasks}
           isOpen={
             currentModal.modal === "new-subtask" &&
+            currentModal.id !== undefined
+          }
+        />
+      ) : null}
+      {currentModal.modal === "folder-options" &&
+      currentModal.id !== undefined ? (
+        <FolderOptionsModal
+          fetchFolders={fetchFolders && fetchFolders}
+          isOpen={
+            currentModal.modal === "folder-options" &&
             currentModal.id !== undefined
           }
         />

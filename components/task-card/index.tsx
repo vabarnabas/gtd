@@ -52,7 +52,7 @@ export default function TaskCard({
             fetchTasks && (await fetchTasks())
             createToast({
               title: "Success.",
-              subtitle: "You have successfully deleted the task.",
+              subtitle: "You have successfully updated the folder.",
               expiration: 10000,
               type: "success",
             })

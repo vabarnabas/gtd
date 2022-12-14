@@ -2,6 +2,7 @@ import autoAnimate from "@formkit/auto-animate"
 import React, { useEffect, useRef } from "react"
 
 import { Task } from "../../types/prisma.types"
+import EmptyTaskCard from "../empty-task-card"
 import TaskCard from "../task-card"
 
 interface Props {
@@ -37,6 +38,7 @@ export default function TaskGrid({ tasks, fetchTasks }: Props) {
         .map((task) => (
           <TaskCard fetchTasks={fetchTasks} {...task} key={task.id} />
         ))}
+      <EmptyTaskCard />
     </div>
   )
 }
