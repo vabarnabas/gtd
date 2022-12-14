@@ -1,5 +1,4 @@
 import { useRouter } from "next/router"
-import { useEffect } from "react"
 import useSWR from "swr"
 
 import BreadCrumb from "../components/breadcrumb"
@@ -40,19 +39,10 @@ export default function Home() {
 
   const isLoading = folderIsLoading || taskIsLoading
 
-  useEffect(() => {
-    if (!folderIsLoading && folderData && FolderHelper.isIn(folderData, id)) {
-      router.push("/")
-    }
-  }, [folderData, folderIsLoading, id, router])
-
   return (
     <Layout fetchFolders={folderMutate} fetchTasks={taskMutate}>
       {!error ? (
-        !isLoading &&
-        folderData &&
-        taskData &&
-        !FolderHelper.isIn(folderData, id) ? (
+        !isLoading && folderData && taskData ? (
           <div className="flex h-full w-full flex-col items-center rounded-md px-6 pt-4 pb-2 shadow">
             <div className="mb-4 flex w-full items-center justify-center gap-x-4">
               <BreadCrumb
