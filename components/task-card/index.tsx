@@ -127,7 +127,10 @@ export default function TaskCard({
         <Marked>{description}</Marked>
       </div>
       <div className="mt-4 flex flex-wrap items-center justify-between gap-x-2 gap-y-2 text-sm">
-        <button className="rounded-md bg-blue-500 px-2 py-1 text-white hover:bg-blue-600">
+        <button
+          onClick={() => openModal({ modal: "task", id })}
+          className="rounded-md bg-blue-500 px-2 py-1 text-white hover:bg-blue-600"
+        >
           Open
         </button>
         <div className="flex items-center gap-x-3">

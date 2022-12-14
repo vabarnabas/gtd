@@ -7,8 +7,8 @@ import ConfirmModal from "../confirm-modal"
 import FolderOptionsModal from "../folder-options-modal"
 import Navbar from "../navbar"
 import NewFolderModal from "../new-folder-modal"
-import NewSubtaskModal from "../new-subtask-modal"
 import NewTaskModal from "../new-task-modal"
+import TaskModal from "../task-modal"
 import Toast from "../toast"
 import ToastHandler from "../toast/toast-handler"
 
@@ -63,12 +63,12 @@ export default function Layout({ children, fetchTasks, fetchFolders }: Props) {
           isOpen={currentModal.modal === "new-folder"}
         />
       ) : null}
-      {currentModal.modal === "new-subtask" && currentModal.id !== undefined ? (
-        <NewSubtaskModal
+
+      {currentModal.modal === "task" && currentModal.id !== undefined ? (
+        <TaskModal
           fetchTasks={fetchTasks && fetchTasks}
           isOpen={
-            currentModal.modal === "new-subtask" &&
-            currentModal.id !== undefined
+            currentModal.modal === "task" && currentModal.id !== undefined
           }
         />
       ) : null}

@@ -12,7 +12,11 @@ interface Props {
 export default function BaseModal({ children, isOpen, onClose, title }: Props) {
   return (
     <Transition appear show={isOpen} as={Fragment}>
-      <Dialog as="div" className="relative z-10 select-none" onClose={onClose}>
+      <Dialog
+        as="div"
+        className="relative z-10 select-none scrollbar-hide"
+        onClose={onClose}
+      >
         <Transition.Child
           as={Fragment}
           enter="ease-out duration-300"
@@ -36,13 +40,13 @@ export default function BaseModal({ children, isOpen, onClose, title }: Props) {
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="mx-4 w-full max-w-md transform rounded-2xl bg-white p-4 text-left align-middle text-gray-700 shadow-xl transition-all">
+              <Dialog.Panel className="mx-4 w-full max-w-md transform rounded-2xl bg-white p-4 text-left align-middle text-gray-700 shadow-xl transition-all scrollbar-hide">
                 {title ? (
                   <Dialog.Title className="text mb-3 text-lg font-bold">
                     {title}
                   </Dialog.Title>
                 ) : null}
-                <div className="flex h-full min-h-[80px] w-full items-center justify-center text-gray-700">
+                <div className="flex h-full min-h-[80px] w-full text-gray-700 scrollbar-hide">
                   {children}
                 </div>
               </Dialog.Panel>

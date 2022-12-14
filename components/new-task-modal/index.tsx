@@ -1,10 +1,8 @@
-import { Listbox, Transition } from "@headlessui/react"
 import { yupResolver } from "@hookform/resolvers/yup"
-import clsx from "clsx"
-import React, { Fragment, useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 import { FormProvider, useForm } from "react-hook-form"
 import { BiCheckbox } from "react-icons/bi"
-import { HiFolder, HiOutlineChevronDown } from "react-icons/hi"
+import { HiFolder } from "react-icons/hi"
 import { TiFlowChildren } from "react-icons/ti"
 import useSWR from "swr"
 import * as yup from "yup"
@@ -16,6 +14,8 @@ import { useErrorHandler } from "../../services/useErrorHandler"
 import useModalStore from "../../store/modal.store"
 import { Folder, Task } from "../../types/prisma.types"
 import BaseModal from "../base-modal"
+import CustomButton, { ButtonStyle } from "../inputs/custom-button"
+import CustomListbox from "../inputs/custom-listbox"
 import Spinner from "../spinner"
 
 interface Props {
@@ -56,7 +56,7 @@ export default function NewTaskModal({ isOpen, fetchTasks }: Props) {
     },
   ]
 
-  const [selected, setSelected] = useState(itemStates[0])
+  const [selectedStatus, setSelectedStatus] = useState(itemStates[0])
   const [selectedFolder, setSelectedFolder] = useState<Folder>({} as Folder)
   const [selectedTask, setSelectedTask] = useState<Task>({
     id: "",
@@ -67,7 +67,11 @@ export default function NewTaskModal({ isOpen, fetchTasks }: Props) {
   } as Task)
   const { createToast } = useToast()
 
-  const { data, error, isLoading, mutate } = useSWR("fetchFolders", () =>
+  const {
+    data: folderData,
+    error: folderError,
+    isLoading: folderIsLoading,
+  } = useSWR("fetchFolders", () =>
     errorHandler(async () => await requestHelper.getMy<Folder>("folders"))
   )
 
@@ -83,21 +87,21 @@ export default function NewTaskModal({ isOpen, fetchTasks }: Props) {
   }, [taskIsLoading, taskData, currentModal])
 
   useEffect(() => {
-    if (!isLoading && data) {
+    if (!folderIsLoading && folderData) {
       currentModal.id
         ? setSelectedFolder(
-            (data as Folder[]).filter(
+            (folderData as Folder[]).filter(
               (folder) => folder.id === currentModal.id
             )[0]
           )
-        : setSelectedFolder(data[0])
+        : setSelectedFolder(folderData[0])
     }
-  }, [isLoading, data, currentModal])
+  }, [folderIsLoading, folderData, currentModal])
 
   const defaultValues: FormValues = {
     title: "",
     description: "",
-    status: selected.name,
+    status: selectedStatus.name,
     folderId: "",
     parentId: null,
   }
@@ -116,6 +120,7 @@ export default function NewTaskModal({ isOpen, fetchTasks }: Props) {
     register,
     handleSubmit,
     setValue,
+    getValues,
     formState: { errors },
   } = form
   const onSubmit = handleSubmit((data) => createTask(data as Task))
@@ -141,9 +146,11 @@ export default function NewTaskModal({ isOpen, fetchTasks }: Props) {
     })
   }
 
+  console.log(getValues())
+
   return (
     <BaseModal title="Create New Task" isOpen={isOpen} onClose={closeModal}>
-      {!isLoading && data && !taskIsLoading && taskData ? (
+      {!folderIsLoading && folderData && !taskIsLoading && taskData ? (
         <FormProvider {...form}>
           <form className="w-full space-y-3" onSubmit={onSubmit}>
             <div className="">
@@ -171,238 +178,37 @@ export default function NewTaskModal({ isOpen, fetchTasks }: Props) {
                 </p>
               )}
             </div>
-            <div className="">
-              <Listbox
-                value={selectedTask}
-                onChange={(e) => {
-                  setValue("parentId", e.title)
-                  setSelectedTask(e)
-                }}
-              >
-                <div className="relative w-full">
-                  <div className="relative flex items-center">
-                    <Listbox.Button
-                      className={clsx(
-                        "cursor-pointers relative w-full rounded-md bg-gray-100 py-1 pl-8 pr-3 text-left focus:outline-none"
-                      )}
-                    >
-                      <span className="flex items-center justify-between truncate text-gray-500">
-                        {selectedTask.title} <HiOutlineChevronDown />
-                      </span>
-                    </Listbox.Button>
-                    <TiFlowChildren className="absolute left-3 text-gray-400" />
-                  </div>
-                  <Transition
-                    as={Fragment}
-                    leave="transition ease-in duration-100"
-                    leaveFrom="opacity-100"
-                    leaveTo="opacity-0"
-                  >
-                    <Listbox.Options className="absolute z-10 mt-1 max-h-40 w-full overflow-auto rounded-md bg-white p-1 py-1 text-sm text-gray-500 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                      <Listbox.Option
-                        className={({ active }) =>
-                          clsx(
-                            "relative cursor-pointer select-none rounded-md py-1 px-1",
-                            active ? "bg-blue-500 text-white" : null
-                          )
-                        }
-                        value={{ id: null, title: "No Parent" }}
-                      >
-                        {({ selected }) => (
-                          <>
-                            <span
-                              className={`block truncate ${
-                                selected ? "font-medium" : "font-normal"
-                              }`}
-                            >
-                              No Parent
-                            </span>
-                            {selected ? (
-                              <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-600">
-                                {/* <CheckIcon className="h-5 w-5" aria-hidden="true" /> */}
-                              </span>
-                            ) : null}
-                          </>
-                        )}
-                      </Listbox.Option>
-                      {(taskData as Task[]).map((task, stateIdx) => (
-                        <Listbox.Option
-                          key={stateIdx}
-                          className={({ active }) =>
-                            clsx(
-                              "relative cursor-pointer select-none rounded-md py-1 px-1",
-                              active ? "bg-blue-500 text-white" : null
-                            )
-                          }
-                          value={task}
-                        >
-                          {({ selected }) => (
-                            <>
-                              <span
-                                className={`block truncate ${
-                                  selected ? "font-medium" : "font-normal"
-                                }`}
-                              >
-                                {task.title}
-                              </span>
-                              {selected ? (
-                                <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-600">
-                                  {/* <CheckIcon className="h-5 w-5" aria-hidden="true" /> */}
-                                </span>
-                              ) : null}
-                            </>
-                          )}
-                        </Listbox.Option>
-                      ))}
-                    </Listbox.Options>
-                  </Transition>
-                </div>
-              </Listbox>
-              {errors.status?.message && (
-                <p className="mt-0.5 pl-2 text-xs text-rose-500">
-                  {errors.status.message}
-                </p>
-              )}
-            </div>
-            <div className="">
-              <Listbox
-                value={selectedFolder}
-                onChange={(e) => {
-                  setValue("folderId", e.title)
-                  setSelectedFolder(e)
-                }}
-              >
-                <div className="relative w-full">
-                  <div className="relative flex items-center">
-                    <Listbox.Button
-                      className={clsx(
-                        "cursor-pointers relative w-full rounded-md bg-gray-100 py-1 pl-8 pr-3 text-left focus:outline-none"
-                      )}
-                    >
-                      <span className="flex items-center justify-between truncate text-gray-500">
-                        {selectedFolder.title} <HiOutlineChevronDown />
-                      </span>
-                    </Listbox.Button>
-                    <HiFolder className="absolute left-3 text-gray-400" />
-                  </div>
-                  <Transition
-                    as={Fragment}
-                    leave="transition ease-in duration-100"
-                    leaveFrom="opacity-100"
-                    leaveTo="opacity-0"
-                  >
-                    <Listbox.Options className="absolute z-10 mt-1 max-h-40 w-full overflow-auto rounded-md bg-white p-1 py-1 text-sm text-gray-500 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                      {(data as Folder[]).map((folder, stateIdx) => (
-                        <Listbox.Option
-                          key={stateIdx}
-                          className={({ active }) =>
-                            clsx(
-                              "relative cursor-pointer select-none rounded-md py-1 px-1",
-                              active ? "bg-blue-500 text-white" : null
-                            )
-                          }
-                          value={folder}
-                        >
-                          {({ selected }) => (
-                            <>
-                              <span
-                                className={`block truncate ${
-                                  selected ? "font-medium" : "font-normal"
-                                }`}
-                              >
-                                {folder.title}
-                              </span>
-                              {selected ? (
-                                <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-600">
-                                  {/* <CheckIcon className="h-5 w-5" aria-hidden="true" /> */}
-                                </span>
-                              ) : null}
-                            </>
-                          )}
-                        </Listbox.Option>
-                      ))}
-                    </Listbox.Options>
-                  </Transition>
-                </div>
-              </Listbox>
-              {errors.status?.message && (
-                <p className="mt-0.5 pl-2 text-xs text-rose-500">
-                  {errors.status.message}
-                </p>
-              )}
-            </div>
-            <div className="">
-              <Listbox
-                value={selected}
-                onChange={(e) => {
-                  setValue("status", e.name)
-                  setSelected(e)
-                }}
-              >
-                <div className="relative w-full">
-                  <div className="relative flex items-center">
-                    <Listbox.Button
-                      className={clsx(
-                        "cursor-pointers relative w-full rounded-md py-1 pl-8 pr-3 text-left focus:outline-none",
-                        selected.className
-                      )}
-                    >
-                      <span className="flex items-center justify-between truncate">
-                        {selected.name} <HiOutlineChevronDown />
-                      </span>
-                    </Listbox.Button>
-                    <BiCheckbox className="absolute left-3 text-gray-400" />
-                  </div>
-                  <Transition
-                    as={Fragment}
-                    leave="transition ease-in duration-100"
-                    leaveFrom="opacity-100"
-                    leaveTo="opacity-0"
-                  >
-                    <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white p-1 py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                      {itemStates.map((state, stateIdx) => (
-                        <Listbox.Option
-                          key={stateIdx}
-                          className={({ active }) =>
-                            clsx(
-                              "relative cursor-pointer select-none rounded-md py-1 px-1",
-                              active ? state.className : null
-                            )
-                          }
-                          value={state}
-                        >
-                          {({ selected }) => (
-                            <>
-                              <span
-                                className={`block truncate ${
-                                  selected ? "font-medium" : "font-normal"
-                                }`}
-                              >
-                                {state.name}
-                              </span>
-                              {selected ? (
-                                <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-600">
-                                  {/* <CheckIcon className="h-5 w-5" aria-hidden="true" /> */}
-                                </span>
-                              ) : null}
-                            </>
-                          )}
-                        </Listbox.Option>
-                      ))}
-                    </Listbox.Options>
-                  </Transition>
-                </div>
-              </Listbox>
-              {errors.status?.message && (
-                <p className="mt-0.5 pl-2 text-xs text-rose-500">
-                  {errors.status.message}
-                </p>
-              )}
-            </div>
-
-            <button className="w-full rounded-md bg-blue-500 px-2 py-1 text-white hover:bg-blue-600">
-              Create
-            </button>
+            <CustomListbox
+              value={selectedTask}
+              onChange={(e) => {
+                setValue("parentId", e.title)
+                setSelectedTask(e)
+              }}
+              icon={<TiFlowChildren />}
+              options={
+                [{ id: "", title: "No Parent" }, ...taskData] as Folder[]
+              }
+            />
+            <CustomListbox
+              value={selectedFolder}
+              onChange={(e) => {
+                setValue("folderId", e.title)
+                setSelectedFolder(e)
+              }}
+              icon={<HiFolder />}
+              options={folderData as Folder[]}
+            />
+            <CustomListbox
+              value={selectedStatus}
+              onChange={(e) => {
+                setValue("status", e.name)
+                setSelectedStatus(e)
+              }}
+              icon={<BiCheckbox />}
+              options={itemStates}
+              selectionKey="name"
+            />
+            <CustomButton text="Create" style={ButtonStyle.BASE_PRIMARY} />
           </form>
         </FormProvider>
       ) : (
