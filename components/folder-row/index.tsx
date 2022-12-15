@@ -22,11 +22,11 @@ export default function FolderRow({ folder, folders }: Props) {
   }, [parent])
 
   return (
-    <div ref={parent} className=" text-gray-600">
+    <div ref={parent} className="">
       <div
         onClick={(e) => {
           e.stopPropagation()
-          router.push(`/${folder.id}`)
+          router.push(`/folders/${folder.id}`)
         }}
         key={folder.id}
         className="group flex cursor-pointer items-center rounded-md py-1.5 px-2 hover:bg-gray-100"

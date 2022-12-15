@@ -16,7 +16,7 @@ export default function EmptyTaskCard({ action }: Props) {
   return (
     <div
       onClick={() => openModal({ modal: "new-task", id })}
-      className="group relative box-border h-full w-full rounded-lg shadow-md"
+      className="group relative box-border h-full w-full rounded-lg"
     >
       <TaskCard id="empty" description="" status="" title="" />
       <div className="absolute inset-0 box-border flex cursor-pointer items-center justify-center rounded-lg border-2 border-blue-500 bg-white text-blue-500 hover:bg-blue-50">

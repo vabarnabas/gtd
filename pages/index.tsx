@@ -20,25 +20,27 @@ export default function Home() {
 
   return (
     <Layout fetchFolders={mutate}>
-      <div className="flex h-full w-full flex-col items-center rounded-md px-4 pt-4 pb-2 shadow">
+      <div className="flex h-full w-full flex-col items-center rounded-md px-6 pt-6 pb-2">
         {!error ? (
           !isLoading && data ? (
-            <div className="w-full rounded-md bg-white p-4 shadow-md">
-              <p className="mb-3 text-lg font-bold">My Folders</p>
+            <div className="w-full rounded-md bg-white">
+              <div className="mb-5">
+                <p className="text-2xl font-bold">My Folders</p>
+                <div
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    openModal({ modal: "new-folder" })
+                    // router.push(`/${folder.id}`)
+                  }}
+                  className="mt-2 flex w-max cursor-pointer items-center justify-center rounded-md text-sm text-blue-500 hover:text-blue-600"
+                >
+                  <HiPlus className="" />
+                  <p className="ml-1">Create New Folder</p>
+                </div>
+              </div>
               {FolderHelper.findTopLevel(data).map((folder) => (
                 <FolderRow key={folder.id} folders={data} folder={folder} />
               ))}
-              <div
-                onClick={(e) => {
-                  e.stopPropagation()
-                  openModal({ modal: "new-folder" })
-                  // router.push(`/${folder.id}`)
-                }}
-                className="group mt-6 flex cursor-pointer items-center rounded-md border-blue-500 py-1.5 px-2 text-xs text-blue-500 hover:bg-blue-50"
-              >
-                <HiPlus />
-                <p className="ml-1.5">Create New Folder</p>
-              </div>
             </div>
           ) : (
             <Spinner />

@@ -21,8 +21,11 @@ export default function BreadCrumb({ path, className }: Props) {
       className={clsx("flex w-full items-center space-x-1 text-sm", className)}
     >
       <div className="flex items-center text-blue-500">
-        <FaHome className="cursor-pointer" onClick={() => router.push("/")} />
-        <HiChevronRight className="ml-2" />
+        <FaHome
+          className="cursor-pointer"
+          onClick={() => router.push("/folders")}
+        />
+        {path.length !== 0 ? <HiChevronRight className="ml-2" /> : null}
       </div>
       {path.map((item, idx) => (
         <div

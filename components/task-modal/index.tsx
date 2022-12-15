@@ -41,7 +41,7 @@ export default function TaskModal({ isOpen }: Props) {
   )
 
   return (
-    <BaseModal title="" isOpen={isOpen} onClose={closeModal}>
+    <BaseModal title={data && data.title} isOpen={isOpen} onClose={closeModal}>
       {!error ? (
         !isLoading && data ? (
           <div className="w-full">

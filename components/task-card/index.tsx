@@ -87,7 +87,7 @@ export default function TaskCard({
   )
 
   return (
-    <div className="relative h-max w-full rounded-lg bg-white p-4 shadow-md">
+    <div className="relative h-max w-full rounded-lg border-2 bg-white p-4">
       <Menu as="div" className="">
         <div className="relative flex items-center justify-between">
           <p className="text-lg font-bold">{title}</p>
@@ -123,7 +123,7 @@ export default function TaskCard({
           </Transition>
         </div>
       </Menu>
-      <div className="prose mt-3 h-20 min-w-full overflow-y-auto text-sm prose-a:text-blue-500">
+      <div className="prose prose-sm mt-3 h-20 min-w-full overflow-y-auto text-sm prose-a:text-blue-500">
         <Marked>{description}</Marked>
       </div>
       <div className="mt-4 flex flex-wrap items-center justify-between gap-x-2 gap-y-2 text-sm">
