@@ -1,11 +1,9 @@
 import { useRouter } from "next/router"
 import useSWR from "swr"
 
-import BreadCrumb from "../components/breadcrumb"
+import FolderPage from "../components/folder-page"
 import Layout from "../components/layout"
 import Spinner from "../components/spinner"
-import TaskGrid from "../components/task-grid"
-import { FolderHelper } from "../helpers/FolderHelper"
 import { requestHelper } from "../services/requestHelper"
 import { useErrorHandler } from "../services/useErrorHandler"
 import useModalStore from "../store/modal.store"
@@ -15,7 +13,7 @@ export default function Home() {
   const openModal = useModalStore((state) => state.openModal)
   const { errorHandler } = useErrorHandler()
   const router = useRouter()
-  const id = router.query.id as string
+  const id = router.query.id as string | undefined
 
   const {
     data: folderData,
@@ -43,43 +41,12 @@ export default function Home() {
     <Layout fetchFolders={folderMutate} fetchTasks={taskMutate}>
       {!error ? (
         !isLoading && folderData && taskData ? (
-          <div className="flex h-full w-full flex-col items-center rounded-md px-6 pt-4 pb-2 shadow">
-            <div className="mb-4 flex w-full items-center justify-between gap-x-4">
-              <BreadCrumb
-                path={[
-                  ...FolderHelper.findDeepParents(
-                    folderData as Folder[],
-                    id
-                  ).reverse(),
-                  FolderHelper.findFolder(folderData as Folder[], id),
-                ].map((folder) => {
-                  return {
-                    label: folder.title,
-                    path: FolderHelper.isSame(folder, id)
-                      ? undefined
-                      : `/${folder.id}`,
-                  }
-                })}
-              />
-              <p
-                onClick={() => {
-                  openModal({ modal: "folder-options", id })
-                }}
-                className="w-min cursor-pointer text-sm text-blue-500 hover:text-blue-600 hover:underline"
-              >
-                Options
-              </p>
-            </div>
-
-            <div className="h-full w-full overflow-y-auto">
-              <TaskGrid
-                tasks={(taskData as Task[]).filter(
-                  (task) => task.folderId === id
-                )}
-                fetchTasks={taskMutate}
-              />
-            </div>
-          </div>
+          <FolderPage
+            folders={folderData}
+            tasks={taskData}
+            id={id}
+            fetchTasks={taskMutate}
+          />
         ) : (
           <Spinner />
         )

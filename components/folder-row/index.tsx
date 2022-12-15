@@ -26,7 +26,7 @@ export default function FolderRow({ folder, folders }: Props) {
       <div
         onClick={(e) => {
           e.stopPropagation()
-          router.push(`/folders/${folder.id}`)
+          router.push(`/${folder.id}`)
         }}
         key={folder.id}
         className="group flex cursor-pointer items-center rounded-md py-1.5 px-2 hover:bg-gray-100"

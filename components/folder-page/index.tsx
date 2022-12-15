@@ -32,7 +32,7 @@ export default function FolderPage({ folders, tasks, id, fetchTasks }: Props) {
                     label: folder.title,
                     path: FolderHelper.isSame(folder, id)
                       ? undefined
-                      : `/folders/${folder.id}`,
+                      : `/${folder.id}`,
                   }
                 })
               : []
