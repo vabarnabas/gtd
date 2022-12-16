@@ -8,6 +8,7 @@ import FolderRow from "../folder-row"
 
 interface Props {
   folders: Folder[]
+  id?: string
 }
 
 export default function FolderList({ folders }: Props) {

@@ -4,11 +4,7 @@ import { HiPlus } from "react-icons/hi"
 import useModalStore from "../../store/modal.store"
 import TaskCard from "../task-card"
 
-interface Props {
-  action?: () => void
-}
-
-export default function EmptyTaskCard({ action }: Props) {
+export default function EmptyTaskCard() {
   const openModal = useModalStore((state) => state.openModal)
   const router = useRouter()
   const id = router.query.id as string

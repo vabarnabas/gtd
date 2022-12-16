@@ -6,11 +6,9 @@ import Layout from "../components/layout"
 import Spinner from "../components/spinner"
 import { requestHelper } from "../services/requestHelper"
 import { useErrorHandler } from "../services/useErrorHandler"
-import useModalStore from "../store/modal.store"
 import { Folder, Task } from "../types/prisma.types"
 
 export default function Home() {
-  const openModal = useModalStore((state) => state.openModal)
   const { errorHandler } = useErrorHandler()
   const router = useRouter()
   const id = router.query.id as string | undefined
@@ -38,15 +36,14 @@ export default function Home() {
   const isLoading = folderIsLoading || taskIsLoading
 
   return (
-    <Layout fetchFolders={folderMutate} fetchTasks={taskMutate}>
+    <Layout
+      fetchFolders={folderMutate}
+      fetchTasks={taskMutate}
+      folders={folderData}
+    >
       {!error ? (
         !isLoading && folderData && taskData ? (
-          <FolderPage
-            folders={folderData}
-            tasks={taskData}
-            id={id}
-            fetchTasks={taskMutate}
-          />
+          <FolderPage tasks={taskData} id={id} fetchTasks={taskMutate} />
         ) : (
           <Spinner />
         )
