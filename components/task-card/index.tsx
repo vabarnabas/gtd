@@ -87,7 +87,7 @@ export default function TaskCard({
   )
 
   return (
-    <div className="relative h-max w-full rounded-lg border-2 bg-white p-4">
+    <div className="relative h-max w-full rounded-lg border-2 bg-white p-3">
       <Menu as="div" className="">
         <div className="relative flex items-center justify-between">
           <p className="text-lg font-bold">{title}</p>
