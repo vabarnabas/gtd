@@ -14,6 +14,7 @@ import FolderOptionsModal from "../folder-options-modal"
 import Navbar from "../navbar"
 import NewFolderModal from "../new-folder-modal"
 import NewTaskModal from "../new-task-modal"
+import Spinner from "../spinner"
 import TaskModal from "../task-modal"
 import Toast from "../toast"
 import ToastHandler from "../toast/toast-handler"
@@ -46,99 +47,106 @@ export default function Layout({
       </Head>
       <Navbar />
       {folders && folders.length !== 0 ? (
-        <div className="fixed inset-x-0 top-12 flex h-12 items-center px-6">
-          <BreadCrumb
-            path={
-              id
-                ? [
-                    ...FolderHelper.findDeepParents(folders, id).reverse(),
-                    FolderHelper.findFolder(folders, id),
-                  ].map((folder) => {
-                    return {
-                      label: folder.title,
-                      path: FolderHelper.isSame(folder, id)
-                        ? undefined
-                        : `/${folder.id}`,
-                    }
-                  })
-                : []
-            }
-          />
-          <p
-            onClick={() => {
-              id && openModal({ modal: "folder-options", id })
-            }}
-            className={clsx("ml-auto w-min cursor-pointer text-sm", {
-              "text-blue-500 hover:text-blue-600 hover:underline": id,
-              "text-gray-400": !id,
-            })}
-          >
-            Options
-          </p>
-        </div>
-      ) : null}
-      <ToastHandler position="topRight" toastComponent={Toast} />
-      <div className="flex h-full w-full gap-x-8 px-6 pt-24 pb-2">
-        <div
-          className={clsx("", {
-            "hidden flex-col md:flex": id,
-            "w-full md:w-auto": !id,
-          })}
-        >
-          <FolderList folders={folders} />
-        </div>
-        <div className={clsx("w-full", { "hidden md:block": !id })}>
-          {children}
-        </div>
-      </div>
-      {currentModal.modal === "confirm" && currentModal.action ? (
-        <ConfirmModal isOpen={currentModal.modal === "confirm"} />
-      ) : null}
-      {currentModal.modal === "change-password" ? (
-        <ChangePasswordModal
-          isOpen={currentModal.modal === "change-password"}
-        />
-      ) : null}
-      {currentModal.modal === "change-folder" &&
-      currentModal.id !== undefined ? (
-        <ChangeFolderModal
-          fetchTasks={fetchTasks && fetchTasks}
-          isOpen={
-            currentModal.modal === "change-folder" &&
-            currentModal.id !== undefined
-          }
-        />
-      ) : null}
+        <>
+          {folders && folders.length !== 0 ? (
+            <div className="fixed inset-x-0 top-12 flex h-12 items-center px-6">
+              <BreadCrumb
+                path={
+                  id
+                    ? [
+                        ...FolderHelper.findDeepParents(folders, id).reverse(),
+                        FolderHelper.findFolder(folders, id),
+                      ].map((folder) => {
+                        return {
+                          label: folder.title,
+                          path: FolderHelper.isSame(folder, id)
+                            ? undefined
+                            : `/${folder.id}`,
+                        }
+                      })
+                    : []
+                }
+              />
+              <p
+                onClick={() => {
+                  id && openModal({ modal: "folder-options", id })
+                }}
+                className={clsx("ml-auto w-min cursor-pointer text-sm", {
+                  "text-blue-500 hover:text-blue-600 hover:underline": id,
+                  "text-gray-400": !id,
+                })}
+              >
+                Options
+              </p>
+            </div>
+          ) : null}
+          <ToastHandler position="topRight" toastComponent={Toast} />
+          <div className="flex h-full w-full gap-x-8 px-6 pt-24 pb-2">
+            <div
+              className={clsx("", {
+                "hidden flex-col md:flex": id,
+                "w-full md:w-auto": !id,
+              })}
+            >
+              <FolderList folders={folders} />
+            </div>
+            <div className={clsx("w-full", { "hidden md:block": !id })}>
+              {children}
+            </div>
+          </div>
+          {currentModal.modal === "confirm" && currentModal.action ? (
+            <ConfirmModal isOpen={currentModal.modal === "confirm"} />
+          ) : null}
+          {currentModal.modal === "change-password" ? (
+            <ChangePasswordModal
+              isOpen={currentModal.modal === "change-password"}
+            />
+          ) : null}
+          {currentModal.modal === "change-folder" &&
+          currentModal.id !== undefined ? (
+            <ChangeFolderModal
+              fetchTasks={fetchTasks && fetchTasks}
+              isOpen={
+                currentModal.modal === "change-folder" &&
+                currentModal.id !== undefined
+              }
+            />
+          ) : null}
 
-      {currentModal.modal === "new-task" ? (
-        <NewTaskModal
-          fetchTasks={fetchTasks && fetchTasks}
-          isOpen={currentModal.modal === "new-task"}
-        />
-      ) : null}
-      {currentModal.modal === "new-folder" ? (
-        <NewFolderModal
-          fetchFolders={fetchFolders && fetchFolders}
-          isOpen={currentModal.modal === "new-folder"}
-        />
-      ) : null}
-      {currentModal.modal === "task" && currentModal.id !== undefined ? (
-        <TaskModal
-          isOpen={
-            currentModal.modal === "task" && currentModal.id !== undefined
-          }
-        />
-      ) : null}
-      {currentModal.modal === "folder-options" &&
-      currentModal.id !== undefined ? (
-        <FolderOptionsModal
-          fetchFolders={fetchFolders && fetchFolders}
-          isOpen={
-            currentModal.modal === "folder-options" &&
-            currentModal.id !== undefined
-          }
-        />
-      ) : null}
+          {currentModal.modal === "new-task" ? (
+            <NewTaskModal
+              fetchTasks={fetchTasks && fetchTasks}
+              isOpen={currentModal.modal === "new-task"}
+            />
+          ) : null}
+          {currentModal.modal === "new-folder" ? (
+            <NewFolderModal
+              fetchFolders={fetchFolders && fetchFolders}
+              isOpen={currentModal.modal === "new-folder"}
+            />
+          ) : null}
+          {currentModal.modal === "task" && currentModal.id !== undefined ? (
+            <TaskModal
+              fetchTasks={fetchTasks && fetchTasks}
+              isOpen={
+                currentModal.modal === "task" && currentModal.id !== undefined
+              }
+            />
+          ) : null}
+          {currentModal.modal === "folder-options" &&
+          currentModal.id !== undefined ? (
+            <FolderOptionsModal
+              fetchFolders={fetchFolders && fetchFolders}
+              isOpen={
+                currentModal.modal === "folder-options" &&
+                currentModal.id !== undefined
+              }
+            />
+          ) : null}
+        </>
+      ) : (
+        <Spinner />
+      )}
     </div>
   )
 }

@@ -12,13 +12,19 @@ interface Props {
   text: string
   style: ButtonStyle
   onClick?: (...params: any) => void
+  className?: string
 }
 
-export default function CustomButton({ style, text, onClick }: Props) {
+export default function CustomButton({
+  style,
+  text,
+  onClick,
+  className,
+}: Props) {
   return (
     <button
       onClick={() => onClick && onClick()}
-      className={clsx("w-full rounded-md px-2 py-1", style)}
+      className={clsx("w-full rounded-md px-2 py-1", style, className)}
     >
       {text}
     </button>

@@ -30,15 +30,6 @@ export default function ConfirmModal({ isOpen }: Props) {
           <button
             onClick={(e) => {
               e.preventDefault()
-              closeModal()
-            }}
-            className="rounded-md px-2 py-1 text-blue-500 hover:text-blue-600"
-          >
-            Cancel
-          </button>
-          <button
-            onClick={(e) => {
-              e.preventDefault()
               errorHandler(async () => {
                 currentModal.action && (await currentModal.action())
                 closeModal()
@@ -47,6 +38,15 @@ export default function ConfirmModal({ isOpen }: Props) {
             className="rounded-md bg-blue-500 px-2 py-1 text-white hover:bg-blue-600"
           >
             Continue
+          </button>
+          <button
+            onClick={(e) => {
+              e.preventDefault()
+              closeModal()
+            }}
+            className="rounded-md px-2 py-1 text-blue-500 hover:text-blue-600"
+          >
+            Cancel
           </button>
         </div>
       </div>
