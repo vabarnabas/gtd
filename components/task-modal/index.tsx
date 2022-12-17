@@ -106,7 +106,7 @@ export default function TaskModal({ isOpen, fetchTasks }: Props) {
                     }
                   }}
                   style={ButtonStyle.BASE_PRIMARY}
-                  text={isEdit ? "Save" : "Edit Task"}
+                  text={isEdit ? "Save" : "Edit"}
                   className=""
                 />
                 {isEdit ? (

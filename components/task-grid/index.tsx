@@ -18,8 +18,8 @@ export default function TaskGrid({ tasks, fetchTasks }: Props) {
   }, [parent])
 
   const status = {
-    "To Do": 1,
-    "In Progress": 2,
+    "To Do": 2,
+    "In Progress": 1,
     Done: 3,
     Closed: 4,
   }
