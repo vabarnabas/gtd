@@ -26,9 +26,11 @@ export default function FolderList({ folders }: Props) {
         <HiPlus className="" />
         <p className="ml-1">Create New Folder</p>
       </div>
-      {FolderHelper.findTopLevel(folders).map((folder) => (
-        <FolderRow key={folder.id} folders={folders} folder={folder} />
-      ))}
+      {folders &&
+        folders.length !== 0 &&
+        FolderHelper.findTopLevel(folders).map((folder) => (
+          <FolderRow key={folder.id} folders={folders} folder={folder} />
+        ))}
     </>
   )
 }
