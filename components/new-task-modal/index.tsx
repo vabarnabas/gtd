@@ -146,8 +146,6 @@ export default function NewTaskModal({ isOpen, fetchTasks }: Props) {
     })
   }
 
-  console.log(getValues())
-
   return (
     <BaseModal title="Create New Task" isOpen={isOpen} onClose={closeModal}>
       {!folderIsLoading && folderData && !taskIsLoading && taskData ? (

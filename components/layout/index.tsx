@@ -36,8 +36,6 @@ export default function Layout({
   const currentModal = useModalStore((state) => state.currentModal)
   const openModal = useModalStore((state) => state.openModal)
 
-  console.log(folders)
-
   return (
     <div className="h-screen w-screen select-none text-gray-800">
       <Head>
@@ -89,7 +87,9 @@ export default function Layout({
         >
           <FolderList folders={folders} />
         </div>
-        <div className="w-full">{children}</div>
+        <div className={clsx("w-full", { "hidden md:block": !id })}>
+          {children}
+        </div>
       </div>
       {currentModal.modal === "confirm" && currentModal.action ? (
         <ConfirmModal isOpen={currentModal.modal === "confirm"} />
