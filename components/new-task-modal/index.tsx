@@ -146,6 +146,8 @@ export default function NewTaskModal({ isOpen, fetchTasks }: Props) {
     })
   }
 
+  console.log(getValues())
+
   return (
     <BaseModal title="Create New Task" isOpen={isOpen} onClose={closeModal}>
       {!folderIsLoading && folderData && !taskIsLoading && taskData ? (
@@ -199,7 +201,7 @@ export default function NewTaskModal({ isOpen, fetchTasks }: Props) {
             <CustomListbox
               value={selectedStatus}
               onChange={(e) => {
-                setValue("status", e.title)
+                setValue("status", e.name)
                 setSelectedStatus(e)
               }}
               icon={<BiCheckbox />}
