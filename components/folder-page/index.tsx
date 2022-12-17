@@ -1,4 +1,5 @@
 import React from "react"
+import { HiFolder } from "react-icons/hi"
 
 import useModalStore from "../../store/modal.store"
 import { Task } from "../../types/prisma.types"
@@ -25,8 +26,9 @@ export default function FolderPage({ tasks, id, fetchTasks }: Props) {
           </div>
         </div>
       ) : (
-        <div className="mt-10 flex h-full w-full items-start justify-center">
-          <p className="font-medium">
+        <div className="flex h-full w-full flex-col items-center justify-center">
+          <HiFolder className="m-0 h-44 w-44 text-blue-500" />
+          <p className="-mt-4 w-44 text-center font-medium">
             Please select a folder{" "}
             <span
               onClick={() => openModal({ modal: "new-folder" })}

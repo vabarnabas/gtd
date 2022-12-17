@@ -15,6 +15,7 @@ import { useErrorHandler } from "../../services/useErrorHandler"
 import useModalStore from "../../store/modal.store"
 import { Folder } from "../../types/prisma.types"
 import BaseModal from "../base-modal"
+import CustomButton, { ButtonStyle } from "../inputs/custom-button"
 import Spinner from "../spinner"
 
 interface Props {
@@ -35,14 +36,16 @@ export default function FolderOptionsModal({ isOpen, fetchFolders }: Props) {
   const { errorHandler } = useErrorHandler()
   const { createToast } = useToast()
 
-  const { data, error, isLoading } = useSWR("/folders/my", () =>
-    errorHandler(
-      async () =>
-        await requestHelper.getSpecific<Folder>(
-          "folders",
-          currentModal.id as string
-        )
-    )
+  const { data, error, isLoading } = useSWR(
+    `folders/my/${currentModal.id}`,
+    () =>
+      errorHandler(
+        async () =>
+          await requestHelper.getSpecific<Folder>(
+            "folders",
+            currentModal.id as string
+          )
+      )
   )
 
   const {
@@ -90,7 +93,6 @@ export default function FolderOptionsModal({ isOpen, fetchFolders }: Props) {
     // register,
     // handleSubmit,
     setValue,
-    formState: { errors },
   } = form
 
   return (
@@ -218,7 +220,9 @@ export default function FolderOptionsModal({ isOpen, fetchFolders }: Props) {
                 >
                   Create Subfolder
                 </button>
-                <button
+                <CustomButton
+                  text="Delete Folder"
+                  style={ButtonStyle.ERROR_PRIMARY}
                   onClick={() =>
                     openModal({
                       modal: "confirm",
@@ -239,10 +243,7 @@ export default function FolderOptionsModal({ isOpen, fetchFolders }: Props) {
                       },
                     })
                   }
-                  className="bg:text-rose-600 w-full rounded-md bg-rose-500 px-2  py-1 text-white outline-none"
-                >
-                  Delete Folder
-                </button>
+                />
               </div>
             </div>
           </div>
