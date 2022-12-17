@@ -120,7 +120,6 @@ export default function NewTaskModal({ isOpen, fetchTasks }: Props) {
     register,
     handleSubmit,
     setValue,
-    getValues,
     formState: { errors },
   } = form
   const onSubmit = handleSubmit((data) => createTask(data as Task))
@@ -145,8 +144,6 @@ export default function NewTaskModal({ isOpen, fetchTasks }: Props) {
       })
     })
   }
-
-  console.log(getValues())
 
   return (
     <BaseModal title="Create New Task" isOpen={isOpen} onClose={closeModal}>
