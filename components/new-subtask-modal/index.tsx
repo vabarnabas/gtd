@@ -113,7 +113,7 @@ export default function NewSubtaskModal({ isOpen, fetchTasks }: Props) {
       fetchTasks && (await fetchTasks())
       closeModal()
       createToast({
-        title: "Success.",
+        title: "Success",
         subtitle: "You have successfully created a new subtask.",
         expiration: 10000,
         type: "success",

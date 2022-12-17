@@ -138,7 +138,7 @@ export default function NewTaskModal({ isOpen, fetchTasks }: Props) {
       fetchTasks && (await fetchTasks())
       closeModal()
       createToast({
-        title: "Success.",
+        title: "Success",
         subtitle: "You have successfully created a new task.",
         expiration: 10000,
         type: "success",

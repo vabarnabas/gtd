@@ -84,7 +84,7 @@ export default function NewFolderModal({ isOpen, fetchFolders }: Props) {
       fetchFolders && (await fetchFolders())
       closeModal()
       createToast({
-        title: "Success.",
+        title: "Success",
         subtitle: "You have successfully created a new folder.",
         expiration: 10000,
         type: "success",

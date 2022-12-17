@@ -74,7 +74,7 @@ export default function ChangeFolderModal({ isOpen, fetchTasks }: Props) {
       fetchTasks && (await fetchTasks())
       closeModal()
       createToast({
-        title: "Success.",
+        title: "Success",
         subtitle: "You have successfully updated the folder.",
         expiration: 10000,
         type: "success",

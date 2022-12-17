@@ -231,7 +231,7 @@ export default function FolderOptionsModal({ isOpen, fetchFolders }: Props) {
                         closeModal()
                         fetchFolders && (await fetchFolders())
                         createToast({
-                          title: "Success.",
+                          title: "Success",
                           subtitle: "You have successfully deleted the folder.",
                           expiration: 10000,
                           type: "success",

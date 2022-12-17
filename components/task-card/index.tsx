@@ -52,7 +52,7 @@ export default function TaskCard({
             await requestHelper.delete<Task>("tasks", id)
             fetchTasks && (await fetchTasks())
             createToast({
-              title: "Success.",
+              title: "Success",
               subtitle: "You have successfully updated the folder.",
               expiration: 10000,
               type: "success",

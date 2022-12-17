@@ -58,7 +58,7 @@ export default function TaskModal({ isOpen, fetchTasks }: Props) {
       closeModal()
       fetchTasks && (await fetchTasks())
       createToast({
-        title: "Success.",
+        title: "Success",
         subtitle: "You have successfully updated a task.",
         expiration: 10000,
         type: "success",

@@ -18,7 +18,7 @@ export const useErrorHandler = () => {
           options?.customToastProps
             ? createToast(options.customToastProps)
             : createToast({
-                title: "Something went wrong.",
+                title: "Something went wrong",
                 subtitle: "Something went wrong on our end, please try again.",
                 expiration: 10000,
                 type: "error",

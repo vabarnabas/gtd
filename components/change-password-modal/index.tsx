@@ -53,7 +53,7 @@ export default function ChangePasswordModal({ isOpen }: Props) {
     errorHandler(async () => {
       await requestHelper.changePassword(data.oldPassword, data.password)
       createToast({
-        title: "Success.",
+        title: "Success",
         subtitle: "You have successfully changed your password.",
         expiration: 10000,
         type: "success",
