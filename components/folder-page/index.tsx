@@ -27,8 +27,8 @@ export default function FolderPage({ tasks, id, fetchTasks }: Props) {
         </div>
       ) : (
         <div className="flex h-full w-full flex-col items-center justify-center">
-          <HiFolder className="m-0 h-44 w-44 text-blue-500" />
-          <p className="-mt-4 w-44 text-center font-medium">
+          <HiFolder className="m-0 h-40 w-40 text-blue-500" />
+          <p className="-mt-4 w-44 text-center">
             Please select a folder{" "}
             <span
               onClick={() => openModal({ modal: "new-folder" })}
@@ -36,7 +36,6 @@ export default function FolderPage({ tasks, id, fetchTasks }: Props) {
             >
               or create one
             </span>
-            .
           </p>
         </div>
       )}
