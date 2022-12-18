@@ -1,9 +1,11 @@
+import Head from "next/head"
 import { useRouter } from "next/router"
 import useSWR from "swr"
 
 import FolderPage from "../components/folder-page"
 import Layout from "../components/layout"
 import Spinner from "../components/spinner"
+import { FolderHelper } from "../helpers/FolderHelper"
 import { requestHelper } from "../services/requestHelper"
 import { useErrorHandler } from "../services/useErrorHandler"
 import { Folder, Task } from "../types/prisma.types"
@@ -41,15 +43,24 @@ export default function Home() {
       fetchTasks={taskMutate}
       folders={folderData}
     >
-      {!error ? (
-        !isLoading && folderData && taskData ? (
-          <FolderPage tasks={taskData} id={id} fetchTasks={taskMutate} />
+      <>
+        <Head>
+          <title>{`NoteBox${
+            folderData
+              ? ` - ${FolderHelper.findFolder(folderData, id as string).title}`
+              : ""
+          }`}</title>
+        </Head>
+        {!error ? (
+          !isLoading && folderData && taskData ? (
+            <FolderPage tasks={taskData} id={id} fetchTasks={taskMutate} />
+          ) : (
+            <Spinner />
+          )
         ) : (
-          <Spinner />
-        )
-      ) : (
-        <div>Something went wrong.</div>
-      )}
+          <div>Something went wrong.</div>
+        )}
+      </>
     </Layout>
   )
 }
