@@ -1,4 +1,5 @@
-import React from "react"
+import autoAnimate from "@formkit/auto-animate"
+import React, { useEffect, useRef } from "react"
 import { HiPlus } from "react-icons/hi"
 
 import { FolderHelper } from "../../helpers/FolderHelper"
@@ -13,6 +14,11 @@ interface Props {
 
 export default function FolderList({ folders }: Props) {
   const openModal = useModalStore((state) => state.openModal)
+  const parent = useRef(null)
+
+  useEffect(() => {
+    parent.current && autoAnimate(parent.current)
+  }, [parent])
 
   return (
     <>
@@ -26,11 +32,13 @@ export default function FolderList({ folders }: Props) {
         <HiPlus className="" />
         <p className="ml-1">Create New Folder</p>
       </div>
-      {folders &&
-        folders.length !== 0 &&
-        FolderHelper.findTopLevel(folders).map((folder) => (
-          <FolderRow key={folder.id} folders={folders} folder={folder} />
-        ))}
+      <div ref={parent} className="">
+        {folders &&
+          folders.length !== 0 &&
+          FolderHelper.findTopLevel(folders).map((folder) => (
+            <FolderRow key={folder.id} folders={folders} folder={folder} />
+          ))}
+      </div>
     </>
   )
 }

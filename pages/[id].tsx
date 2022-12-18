@@ -46,7 +46,7 @@ export default function Home() {
       <>
         <Head>
           <title>{`NoteBox${
-            folderData
+            folderData && id
               ? ` - ${FolderHelper.findFolder(folderData, id as string).title}`
               : ""
           }`}</title>
