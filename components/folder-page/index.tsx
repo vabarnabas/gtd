@@ -3,7 +3,7 @@ import { HiFolder } from "react-icons/hi"
 
 import useModalStore from "../../store/modal.store"
 import { Task } from "../../types/prisma.types"
-import TaskGrid from "../task-grid"
+import TaskList from "../task-list"
 
 interface Props {
   tasks: Task[]
@@ -19,7 +19,7 @@ export default function FolderPage({ tasks, id, fetchTasks }: Props) {
       {id ? (
         <div className="flex h-full w-full flex-col items-center rounded-md">
           <div className="h-full w-full overflow-y-auto">
-            <TaskGrid
+            <TaskList
               tasks={tasks.filter((task) => task.folderId === id)}
               fetchTasks={fetchTasks}
             />
