@@ -40,7 +40,7 @@ export default function BaseModal({ children, isOpen, onClose, title }: Props) {
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="mx-4 w-full max-w-md transform rounded-2xl bg-white p-4 text-left align-middle text-gray-700 shadow-xl transition-all scrollbar-hide">
+              <Dialog.Panel className="mx-4 w-full max-w-md transform rounded-2xl bg-white p-4 text-left align-middle text-gray-700 shadow-xl transition-all scrollbar-hide dark:bg-[#222] dark:text-gray-50">
                 {title ? (
                   <Dialog.Title className="text mb-3 text-lg font-bold">
                     {title}

@@ -27,7 +27,7 @@ export default function TaskList({ tasks, fetchTasks }: Props) {
   return (
     <div
       ref={parent}
-      className="grid w-full grid-cols-1 divide-y rounded-lg border"
+      className="grid w-full grid-cols-1 divide-y rounded-lg border dark:divide-[#444] dark:border-[#444]"
     >
       {tasks
         .sort(

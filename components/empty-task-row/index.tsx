@@ -17,7 +17,7 @@ export default function EmptyTaskRow() {
       <div className="invisible">
         <TaskRow id="empty" description="" status="" title="" />
       </div>
-      <div className="absolute inset-0 flex cursor-pointer items-center justify-center rounded-b-lg bg-white text-blue-500 hover:bg-blue-50 group-only:rounded-lg">
+      <div className="absolute inset-0 flex cursor-pointer items-center justify-center rounded-b-lg bg-inherit text-blue-500 hover:bg-blue-50 group-only:rounded-lg dark:hover:bg-[#444]">
         <HiPlus className="duration-400 text-xl transition-all ease-out group-hover:scale-[1.10]" />
       </div>
     </div>

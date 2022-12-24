@@ -1,10 +1,8 @@
-import { Listbox, Transition } from "@headlessui/react"
 import { yupResolver } from "@hookform/resolvers/yup"
-import clsx from "clsx"
 import { useRouter } from "next/router"
-import React, { Fragment, useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
-import { HiOutlineChevronDown } from "react-icons/hi"
+import { TiFlowChildren } from "react-icons/ti"
 import useSWR from "swr"
 import * as yup from "yup"
 
@@ -16,6 +14,7 @@ import useModalStore from "../../store/modal.store"
 import { Folder } from "../../types/prisma.types"
 import BaseModal from "../base-modal"
 import CustomButton, { ButtonStyle } from "../inputs/custom-button"
+import CustomListbox from "../inputs/custom-listbox"
 import Spinner from "../spinner"
 
 interface Props {
@@ -100,96 +99,20 @@ export default function FolderOptionsModal({ isOpen, fetchFolders }: Props) {
       {!error || !foldersError ? (
         !isLoading && data && !foldersIsLoading && foldersData ? (
           <div className="w-full space-y-3">
-            <div className="w-full rounded-md bg-gray-100 py-1 px-3 text-gray-400 outline-none">
+            <div className="w-full rounded-md bg-gray-100 py-1 px-3 text-gray-400 outline-none dark:bg-[#333] dark:text-gray-300">
               {data.title}
             </div>
-            <div className="">
-              <Listbox
-                value={selectedFolder}
-                onChange={(e) => {
-                  setValue("parentId", e.title)
-                  setSelectedFolder(e)
-                }}
-              >
-                <div className="relative w-full">
-                  <Listbox.Button
-                    className={clsx(
-                      "cursor-pointers relative w-full rounded-md bg-gray-100 py-1 px-3 text-left focus:outline-none"
-                    )}
-                  >
-                    <span className="flex items-center justify-between truncate text-gray-500">
-                      {selectedFolder?.title} <HiOutlineChevronDown />
-                    </span>
-                  </Listbox.Button>
-                  <Transition
-                    as={Fragment}
-                    leave="transition ease-in duration-100"
-                    leaveFrom="opacity-100"
-                    leaveTo="opacity-0"
-                  >
-                    <Listbox.Options className="absolute z-10 mt-1 max-h-40 w-full overflow-auto rounded-md bg-white p-1 py-1 text-gray-500 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                      <Listbox.Option
-                        className={({ active }) =>
-                          clsx(
-                            "relative cursor-pointer select-none rounded-md py-1 px-1",
-                            active ? "bg-blue-500 text-white" : null
-                          )
-                        }
-                        value={{ id: null, title: "No Parent" }}
-                      >
-                        {({ selected }) => (
-                          <>
-                            <span
-                              className={`block truncate ${
-                                selected ? "font-medium" : "font-normal"
-                              }`}
-                            >
-                              No Parent
-                            </span>
-                            {selected ? (
-                              <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-600">
-                                {/* <CheckIcon className="h-5 w-5" aria-hidden="true" /> */}
-                              </span>
-                            ) : null}
-                          </>
-                        )}
-                      </Listbox.Option>
-                      {(foldersData as Folder[])
-                        .filter((folder) => folder.id !== currentModal.id)
-                        .map((folder, stateIdx) => (
-                          <Listbox.Option
-                            key={stateIdx}
-                            className={({ active }) =>
-                              clsx(
-                                "relative cursor-pointer select-none rounded-md py-1 px-1",
-                                active ? "bg-blue-500 text-white" : null
-                              )
-                            }
-                            value={folder}
-                          >
-                            {({ selected }) => (
-                              <>
-                                <span
-                                  className={`block truncate ${
-                                    selected ? "font-medium" : "font-normal"
-                                  }`}
-                                >
-                                  {folder.title}
-                                </span>
-                                {selected ? (
-                                  <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-600">
-                                    {/* <CheckIcon className="h-5 w-5" aria-hidden="true" /> */}
-                                  </span>
-                                ) : null}
-                              </>
-                            )}
-                          </Listbox.Option>
-                        ))}
-                    </Listbox.Options>
-                  </Transition>
-                </div>
-              </Listbox>
-            </div>
+            <CustomListbox
+              value={selectedFolder}
+              onChange={(e) => {
+                setValue("parentId", e.title)
+                setSelectedFolder(e)
+              }}
+              icon={<TiFlowChildren />}
+              options={
+                [{ id: "", title: "No Parent" }, ...foldersData] as Folder[]
+              }
+            />
             <div className="flex flex-col gap-y-3">
               <button
                 onClick={async () => {

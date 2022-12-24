@@ -18,13 +18,7 @@ interface Props {
   fetchTasks?: () => void
 }
 
-export default function TaskRow({
-  id,
-  title,
-  description,
-  status,
-  fetchTasks,
-}: Props) {
+export default function TaskRow({ id, title, status, fetchTasks }: Props) {
   const openModal = useModalStore((state) => state.openModal)
   const { errorHandler } = useErrorHandler()
   const { createToast } = useToast()
@@ -65,19 +59,19 @@ export default function TaskRow({
   const itemStates = [
     {
       name: "To Do",
-      className: "bg-gray-100 text-gray-500",
+      className: "bg-gray-100 text-gray-500 dark:bg-[#444] dark:text-gray-300",
     },
     {
       name: "In Progress",
-      className: "bg-blue-100 text-blue-500",
+      className: "bg-blue-100 text-blue-500 dark:bg-blue-200",
     },
     {
       name: "Done",
-      className: "bg-green-100 text-green-500",
+      className: "bg-green-100 text-green-500 dark:bg-green-200",
     },
     {
       name: "Closed",
-      className: "bg-rose-100 text-rose-500",
+      className: "bg-rose-100 text-rose-500 dark:bg-rose-200",
     },
   ]
 
@@ -86,7 +80,7 @@ export default function TaskRow({
   )
 
   return (
-    <div className="relative h-max w-full bg-white px-4 py-2 first:rounded-t-lg">
+    <div className="relative h-max w-full bg-inherit px-4 py-2 first:rounded-t-lg">
       <Menu as="div" className="">
         <div className="relative flex items-center justify-between">
           <p
@@ -128,7 +122,7 @@ export default function TaskRow({
                     leaveFrom="opacity-100"
                     leaveTo="opacity-0"
                   >
-                    <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white p-1 py-1 text-sm shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                    <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white p-1 py-1 text-sm shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-[#333] sm:text-sm">
                       {itemStates.map((state, stateIdx) => (
                         <Listbox.Option
                           key={stateIdx}
@@ -169,14 +163,14 @@ export default function TaskRow({
             leaveFrom="transform opacity-100 scale-100"
             leaveTo="transform opacity-0 scale-95"
           >
-            <Menu.Items className="absolute top-0 right-0 z-10 mt-6 w-32 rounded-md border border-gray-100 bg-white p-1 shadow-md">
+            <Menu.Items className="absolute top-0 right-0 z-10 mt-6 w-32 rounded-md border border-gray-100 bg-white p-1 shadow-md dark:border-[#444] dark:bg-[#333]">
               {menuItems.map((item) => (
                 <Menu.Item key={item.title}>
                   {({ active }) => (
                     <div
                       onClick={() => item.action()}
                       className={clsx(
-                        "flex cursor-pointer items-center justify-start rounded-md px-1 py-1 text-sm",
+                        "flex cursor-pointer items-center justify-start rounded-md px-2 py-1 text-sm",
                         { "bg-blue-500 text-white": active }
                       )}
                     >

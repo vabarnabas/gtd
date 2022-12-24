@@ -71,7 +71,7 @@ export default function ChangePasswordModal({ isOpen }: Props) {
           <div className="">
             <input
               type="password"
-              className="w-full rounded-md bg-gray-100 py-1 px-3 outline-none"
+              className="w-full rounded-md bg-gray-100 py-1 px-3 outline-none dark:bg-[#333] dark:text-gray-50"
               {...register("oldPassword")}
               placeholder="Old Password"
             />
@@ -84,7 +84,7 @@ export default function ChangePasswordModal({ isOpen }: Props) {
           <div className="">
             <input
               type="password"
-              className="w-full rounded-md bg-gray-100 py-1 px-3 outline-none"
+              className="w-full rounded-md bg-gray-100 py-1 px-3 outline-none dark:bg-[#333] dark:text-gray-50"
               {...register("password")}
               placeholder="Password"
             />
@@ -97,7 +97,7 @@ export default function ChangePasswordModal({ isOpen }: Props) {
           <div className="">
             <input
               type="password"
-              className="w-full rounded-md bg-gray-100 py-1 px-3 outline-none"
+              className="w-full rounded-md bg-gray-100 py-1 px-3 outline-none dark:bg-[#333] dark:text-gray-50"
               {...register("passwordAgain")}
               placeholder="Confirm Password"
             />

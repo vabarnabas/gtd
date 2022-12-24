@@ -47,12 +47,13 @@ export default function Navbar() {
   ]
 
   return (
-    <div className="fixed inset-x-0 top-0 z-10 flex h-12 items-center justify-between bg-white px-6">
+    <div className="fixed inset-x-0 top-0 z-10 flex h-12 items-center justify-between px-6">
       <div
         onClick={() => router.push("/")}
         className="cursor-pointer font-medium"
       >
         Note<span className="inline text-blue-500">Box</span>
+        <span className="inline text-xs">alpha</span>
       </div>
       <Menu as="div" className="">
         <div className="relative flex items-center justify-between">
@@ -69,7 +70,7 @@ export default function Navbar() {
             leaveFrom="transform opacity-100 scale-100"
             leaveTo="transform opacity-0 scale-95"
           >
-            <Menu.Items className="absolute top-0 right-0 z-10 mt-9 w-48 rounded-md border border-gray-100 bg-white p-1 text-sm shadow-md">
+            <Menu.Items className="absolute top-0 right-0 z-10 mt-9 w-48 rounded-md border border-gray-100 bg-white p-1 text-sm shadow-md dark:border-[#444] dark:bg-[#333]">
               {menuItems.map((item) => (
                 <Menu.Item key={item.title}>
                   {({ active }) => (

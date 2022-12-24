@@ -91,7 +91,7 @@ export default function TaskModal({ isOpen, fetchTasks }: Props) {
                   </div>
                 </form>
               ) : (
-                <div className="prose mb-3 max-h-[512px] w-full select-text flex-col overflow-x-hidden text-sm scrollbar-hide prose-a:text-blue-500 prose-code:h-max">
+                <div className="prose mb-3 max-h-[512px] w-full select-text flex-col overflow-x-hidden text-sm scrollbar-hide prose-a:text-blue-500 prose-code:h-max dark:prose-invert">
                   <Marked>{data.description}</Marked>
                 </div>
               )}

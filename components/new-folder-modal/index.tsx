@@ -99,7 +99,7 @@ export default function NewFolderModal({ isOpen, fetchFolders }: Props) {
             <form className="w-full space-y-3" onSubmit={onSubmit}>
               <div className="">
                 <input
-                  className="w-full rounded-md bg-gray-100 py-1 px-3 outline-none"
+                  className="w-full rounded-md bg-gray-100 py-1 px-3 outline-none dark:bg-[#333] dark:text-gray-50"
                   {...register("title")}
                   placeholder="Title"
                 />

@@ -27,10 +27,10 @@ export default function CustomListbox({
           <div className="relative flex items-center">
             <Listbox.Button
               className={clsx(
-                "cursor-pointers relative w-full rounded-md bg-gray-100 py-1 pl-8 pr-3 text-left focus:outline-none"
+                "cursor-pointers relative w-full rounded-md bg-gray-100  py-1 pl-8 pr-3 text-left focus:outline-none dark:bg-[#333]"
               )}
             >
-              <span className="flex items-center justify-between truncate text-gray-500">
+              <span className="flex items-center justify-between truncate text-gray-500 dark:text-gray-50">
                 {value[selectionKey || "title"]} <HiOutlineChevronDown />
               </span>
             </Listbox.Button>
@@ -42,7 +42,7 @@ export default function CustomListbox({
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <Listbox.Options className="absolute z-10 mt-1 max-h-40 w-full overflow-auto rounded-md bg-white p-1 py-1 text-sm text-gray-500 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+            <Listbox.Options className="absolute z-10 mt-1 max-h-40 w-full overflow-auto rounded-md bg-white p-1 py-1 text-sm text-gray-500 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-[#333] dark:text-gray-50">
               {options.map((option, stateIdx) => (
                 <Listbox.Option
                   key={stateIdx}

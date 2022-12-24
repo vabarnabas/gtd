@@ -29,7 +29,7 @@ export default function FolderRow({ folder, folders }: Props) {
           router.push(`/${folder.id}`)
         }}
         key={folder.id}
-        className="group flex cursor-pointer items-center rounded-md py-1.5 px-2 hover:bg-gray-100"
+        className="group flex cursor-pointer items-center rounded-md py-1.5 px-2 hover:bg-gray-100 dark:hover:bg-[#333]"
       >
         {!FolderHelper.isTopLevel(folders, folder.id) ? (
           <FiCornerDownRight />
