@@ -52,8 +52,8 @@ export default function Navbar() {
         onClick={() => router.push("/")}
         className="cursor-pointer font-medium"
       >
-        Note<span className="inline text-blue-500">Box</span>
-        <span className="inline text-xs">alpha</span>
+        🎄 Note<span className="inline text-blue-500">Box</span>
+        <span className="inline text-xs">v1</span>
       </div>
       <Menu as="div" className="">
         <div className="relative flex items-center justify-between">

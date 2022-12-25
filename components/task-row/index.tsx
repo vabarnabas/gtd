@@ -59,19 +59,22 @@ export default function TaskRow({ id, title, status, fetchTasks }: Props) {
   const itemStates = [
     {
       name: "To Do",
-      className: "bg-gray-100 text-gray-500 dark:bg-[#444] dark:text-gray-300",
+      className: "bg-gray-100 text-gray-500 dark:bg-[#444] dark:text-gray-200",
     },
     {
       name: "In Progress",
-      className: "bg-blue-100 text-blue-500 dark:bg-blue-200",
+      className:
+        "bg-blue-100 text-blue-500 dark:bg-blue-200 dark:text-blue-600",
     },
     {
       name: "Done",
-      className: "bg-green-100 text-green-500 dark:bg-green-200",
+      className:
+        "bg-green-100 text-green-500 dark:bg-green-200 dark:text-green-600",
     },
     {
       name: "Closed",
-      className: "bg-rose-100 text-rose-500 dark:bg-rose-200",
+      className:
+        "bg-rose-100 text-rose-500 dark:bg-rose-200 dark:text-rose-600",
     },
   ]
 
@@ -128,7 +131,7 @@ export default function TaskRow({ id, title, status, fetchTasks }: Props) {
                           key={stateIdx}
                           className={({ active }) =>
                             clsx(
-                              "relative cursor-pointer select-none rounded-md py-1 px-1",
+                              "relative cursor-pointer select-none rounded-md py-1 px-2",
                               active ? state.className : null
                             )
                           }

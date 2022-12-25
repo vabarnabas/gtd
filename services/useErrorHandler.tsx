@@ -8,13 +8,18 @@ export const useErrorHandler = () => {
   const errorHandler = useCallback(
     async (
       callbackFn: (...params: any) => any,
-      options?: { log?: boolean; customToastProps?: ToastProps }
+      options?: {
+        log?: boolean
+        customToastProps?: ToastProps
+        onError?: () => void
+      }
     ) => {
       try {
         return await callbackFn()
       } catch (e) {
         if (options?.log) console.log(e)
         {
+          options?.onError && options.onError()
           options?.customToastProps
             ? createToast(options.customToastProps)
             : createToast({

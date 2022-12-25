@@ -1,9 +1,11 @@
 import { yupResolver } from "@hookform/resolvers/yup"
 import Head from "next/head"
 import { useRouter } from "next/router"
+import { useState } from "react"
 import { FormProvider, useForm } from "react-hook-form"
 import * as yup from "yup"
 
+import Spinner from "../../components/spinner"
 import Toast from "../../components/toast"
 import ToastHandler from "../../components/toast/toast-handler"
 import { requestHelper } from "../../services/requestHelper"
@@ -17,6 +19,7 @@ interface FormValues {
 
 export default function Login() {
   const { errorHandler } = useErrorHandler()
+  const [isLoading, setIsLoading] = useState(false)
   const schema = yup.object().shape({
     email: yup.string().email("Not a Valid E-mail").required("Required Field"),
     password: yup.string().required("Required Field"),
@@ -33,11 +36,19 @@ export default function Login() {
   const tokenservice = new TokenService()
 
   const login = (data: FormValues) => {
-    errorHandler(async () => {
-      const token = await requestHelper.login(data.email, data.password)
-      await tokenservice.saveToken(token.access_token)
-      router.push("/")
-    })
+    setIsLoading(true)
+    errorHandler(
+      async () => {
+        const token = await requestHelper.login(data.email, data.password)
+        await tokenservice.saveToken(token.access_token)
+        router.push("/")
+      },
+      {
+        onError: () => {
+          setIsLoading(false)
+        },
+      }
+    )
   }
 
   return (
@@ -48,55 +59,61 @@ export default function Login() {
         <meta name="viewport" content="width=device-width, user-scalable=no" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <FormProvider {...form}>
-        <form
-          onSubmit={handleSubmit((data) => login(data))}
-          className="flex flex-col space-y-3"
-        >
-          <p className="text-2xl font-bold">Login</p>
-          <div className="">
-            <input
-              type="text"
-              placeholder="E-mail"
-              {...register("email")}
-              className="rounded-md bg-gray-100 py-1 px-3 outline-none dark:bg-[#333] dark:text-gray-50"
-            />
-            {errors.email?.message && (
-              <p className="mt-0.5 pl-2 text-xs text-rose-500">
-                {errors.email.message}
-              </p>
-            )}
-          </div>
-          <div className="">
-            <input
-              type="password"
-              placeholder="Password"
-              {...register("password")}
-              className="rounded-md bg-gray-100 py-1 px-3 outline-none dark:bg-[#333] dark:text-gray-50"
-            />
-            {errors.password?.message && (
-              <p className="mt-0.5 pl-2 text-xs text-rose-500">
-                {errors.password.message}
-              </p>
-            )}
-          </div>
+      {!isLoading ? (
+        <>
+          <FormProvider {...form}>
+            <form
+              onSubmit={handleSubmit((data) => login(data))}
+              className="flex flex-col space-y-3"
+            >
+              <p className="text-2xl font-bold">Login</p>
+              <div className="">
+                <input
+                  type="text"
+                  placeholder="E-mail"
+                  {...register("email")}
+                  className="rounded-md bg-gray-100 py-1 px-3 outline-none dark:bg-[#333] dark:text-gray-50"
+                />
+                {errors.email?.message && (
+                  <p className="mt-0.5 pl-2 text-xs text-rose-500">
+                    {errors.email.message}
+                  </p>
+                )}
+              </div>
+              <div className="">
+                <input
+                  type="password"
+                  placeholder="Password"
+                  {...register("password")}
+                  className="rounded-md bg-gray-100 py-1 px-3 outline-none dark:bg-[#333] dark:text-gray-50"
+                />
+                {errors.password?.message && (
+                  <p className="mt-0.5 pl-2 text-xs text-rose-500">
+                    {errors.password.message}
+                  </p>
+                )}
+              </div>
 
-          <button className="rounded-md bg-blue-500 px-2 py-1 text-white hover:bg-blue-600">
-            Login
-          </button>
-        </form>
-      </FormProvider>
-      <p className="mt-4 text-sm text-gray-500 dark:text-gray-50">
-        New to the platform?{" "}
-        <span
-          onClick={() => {
-            router.push("/register")
-          }}
-          className="cursor-pointer text-blue-500 hover:underline"
-        >
-          Register
-        </span>
-      </p>
+              <button className="rounded-md bg-blue-500 px-2 py-1 text-white hover:bg-blue-600">
+                Login
+              </button>
+            </form>
+          </FormProvider>
+          <p className="mt-4 text-sm text-gray-500 dark:text-gray-50">
+            New to the platform?{" "}
+            <span
+              onClick={() => {
+                router.push("/register")
+              }}
+              className="cursor-pointer text-blue-500 hover:underline"
+            >
+              Register
+            </span>
+          </p>
+        </>
+      ) : (
+        <Spinner />
+      )}
       <ToastHandler position="topRight" toastComponent={Toast} />
     </div>
   )
