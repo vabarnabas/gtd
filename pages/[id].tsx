@@ -33,6 +33,10 @@ export default function Home() {
     errorHandler(async () => await requestHelper.getMy<Task>("tasks"))
   )
 
+  const { data: userData } = useSWR("/current", () =>
+    errorHandler(async () => await requestHelper.currentUser())
+  )
+
   const error = folderError || taskError
 
   const isLoading = folderIsLoading || taskIsLoading
@@ -42,6 +46,7 @@ export default function Home() {
       fetchFolders={folderMutate}
       fetchTasks={taskMutate}
       folders={folderData}
+      user={userData}
     >
       <>
         <Head>

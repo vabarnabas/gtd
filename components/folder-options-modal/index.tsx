@@ -59,6 +59,7 @@ export default function FolderOptionsModal({ isOpen, fetchFolders }: Props) {
     parentId: null,
     userId: "",
     createdAt: new Date(Date.now()),
+    sharedWith: [],
   })
 
   useEffect(() => {

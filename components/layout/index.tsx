@@ -4,7 +4,7 @@ import { useRouter } from "next/router"
 
 import { FolderHelper } from "../../helpers/FolderHelper"
 import useModalStore from "../../store/modal.store"
-import { Folder } from "../../types/prisma.types"
+import { Folder, User } from "../../types/prisma.types"
 import BreadCrumb from "../breadcrumb"
 import ChangeFolderModal from "../change-folder-modal"
 import ChangePasswordModal from "../change-password-modal"
@@ -25,6 +25,7 @@ interface Props {
   fetchTasks?: () => void
   fetchFolders?: () => void
   folders: Folder[]
+  user?: User
 }
 
 export default function Layout({
@@ -32,6 +33,7 @@ export default function Layout({
   fetchTasks,
   fetchFolders,
   folders,
+  user,
 }: Props) {
   const router = useRouter()
   const id = router.query.id as string | undefined
@@ -69,17 +71,22 @@ export default function Layout({
                 }
               />
               <div className="flex gap-x-3">
-                <p
-                  onClick={() => {
-                    id && openModal({ modal: "share-folder", id })
-                  }}
-                  className={clsx("ml-auto w-min cursor-pointer text-sm", {
-                    "text-blue-500 hover:text-blue-600 hover:underline": id,
-                    "cursor-not-allowed text-gray-400": !id,
-                  })}
-                >
-                  Share
-                </p>
+                {user &&
+                id &&
+                FolderHelper.findFolder(folders, id as string).userId ===
+                  user.id ? (
+                  <p
+                    onClick={() => {
+                      id && openModal({ modal: "share-folder", id })
+                    }}
+                    className={clsx("ml-auto w-min cursor-pointer text-sm", {
+                      "text-blue-500 hover:text-blue-600 hover:underline": id,
+                      "cursor-not-allowed text-gray-400": !id,
+                    })}
+                  >
+                    Share
+                  </p>
+                ) : null}
                 <p
                   onClick={() => {
                     id && openModal({ modal: "folder-options", id })
