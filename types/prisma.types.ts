@@ -36,4 +36,5 @@ export type Folder = {
   createdAt: Date
   userId: string
   parentId: string | null
+  sharedWith: User[]
 }

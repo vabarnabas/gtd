@@ -52,6 +52,28 @@ export const requestHelper = {
 
     return response
   },
+  async connect(id: string, userId: string): Promise<Folder[]> {
+    const response = await makeRequest("POST", {
+      baseUrl: process.env.NEXT_PUBLIC_API_URL as string,
+      path: `folders/connect/${id}/${userId}`,
+      token: await this.getToken(),
+    })
+
+    if (response?.statusCode) throw new Error()
+
+    return response
+  },
+  async disconnect(id: string, userId: string): Promise<Folder[]> {
+    const response = await makeRequest("POST", {
+      baseUrl: process.env.NEXT_PUBLIC_API_URL as string,
+      path: `folders/disconnect/${id}/${userId}`,
+      token: await this.getToken(),
+    })
+
+    if (response?.statusCode) throw new Error()
+
+    return response
+  },
   async create<T extends RequestTypes>(
     route: Route,
     input: Omit<T, "id">

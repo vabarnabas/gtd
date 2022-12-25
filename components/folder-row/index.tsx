@@ -2,7 +2,7 @@ import autoAnimate from "@formkit/auto-animate"
 import { useRouter } from "next/router"
 import React, { useEffect, useRef } from "react"
 import { FiCornerDownRight } from "react-icons/fi"
-import { HiFolder } from "react-icons/hi"
+import { MdFolder, MdFolderShared } from "react-icons/md"
 
 import { FolderHelper } from "../../helpers/FolderHelper"
 import { Folder } from "../../types/prisma.types"
@@ -33,8 +33,10 @@ export default function FolderRow({ folder, folders }: Props) {
       >
         {!FolderHelper.isTopLevel(folders, folder.id) ? (
           <FiCornerDownRight />
+        ) : folder.sharedWith.length !== 0 ? (
+          <MdFolderShared />
         ) : (
-          <HiFolder />
+          <MdFolder />
         )}
         <div className="ml-1.5">
           <TextPath

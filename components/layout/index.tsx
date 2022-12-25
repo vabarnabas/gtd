@@ -11,6 +11,7 @@ import ChangePasswordModal from "../change-password-modal"
 import ConfirmModal from "../confirm-modal"
 import FolderList from "../folder-list"
 import FolderOptionsModal from "../folder-options-modal"
+import FolderShareModal from "../folder-share-modal"
 import Navbar from "../navbar"
 import NewFolderModal from "../new-folder-modal"
 import NewTaskModal from "../new-task-modal"
@@ -67,17 +68,30 @@ export default function Layout({
                     : []
                 }
               />
-              <p
-                onClick={() => {
-                  id && openModal({ modal: "folder-options", id })
-                }}
-                className={clsx("ml-auto w-min cursor-pointer text-sm", {
-                  "text-blue-500 hover:text-blue-600 hover:underline": id,
-                  "cursor-not-allowed text-gray-400": !id,
-                })}
-              >
-                Options
-              </p>
+              <div className="flex gap-x-3">
+                <p
+                  onClick={() => {
+                    id && openModal({ modal: "share-folder", id })
+                  }}
+                  className={clsx("ml-auto w-min cursor-pointer text-sm", {
+                    "text-blue-500 hover:text-blue-600 hover:underline": id,
+                    "cursor-not-allowed text-gray-400": !id,
+                  })}
+                >
+                  Share
+                </p>
+                <p
+                  onClick={() => {
+                    id && openModal({ modal: "folder-options", id })
+                  }}
+                  className={clsx("ml-auto w-min cursor-pointer text-sm", {
+                    "text-blue-500 hover:text-blue-600 hover:underline": id,
+                    "cursor-not-allowed text-gray-400": !id,
+                  })}
+                >
+                  Options
+                </p>
+              </div>
             </div>
           ) : null}
           <ToastHandler position="topRight" toastComponent={Toast} />
@@ -139,6 +153,16 @@ export default function Layout({
               fetchFolders={fetchFolders && fetchFolders}
               isOpen={
                 currentModal.modal === "folder-options" &&
+                currentModal.id !== undefined
+              }
+            />
+          ) : null}
+          {currentModal.modal === "share-folder" &&
+          currentModal.id !== undefined ? (
+            <FolderShareModal
+              fetchFolders={fetchFolders && fetchFolders}
+              isOpen={
+                currentModal.modal === "share-folder" &&
                 currentModal.id !== undefined
               }
             />
