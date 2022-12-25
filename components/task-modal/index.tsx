@@ -79,7 +79,7 @@ export default function TaskModal({ isOpen, fetchTasks }: Props) {
                   <div className="">
                     <textarea
                       rows={10}
-                      className="mb-3 w-full resize-none rounded-md bg-gray-100 py-1 px-3 outline-none"
+                      className="mb-3 w-full resize-none rounded-md bg-gray-100 py-1 px-3 outline-none dark:bg-[#333] dark:text-gray-50"
                       {...register("description")}
                       placeholder="Description"
                     />

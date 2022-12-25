@@ -21,7 +21,7 @@ export default function ConfirmModal({ isOpen }: Props) {
           <p className="flex aspect-square h-10 items-center justify-center rounded-full bg-blue-200 text-lg text-blue-500">
             ?
           </p>
-          <p className="text-left text-base">
+          <p className="text-left text-base dark:text-gray-50">
             Are you sure you would like to continue with this action? It cannot
             be reverted in the future.
           </p>

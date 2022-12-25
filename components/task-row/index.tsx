@@ -46,7 +46,7 @@ export default function TaskRow({ id, title, status, fetchTasks }: Props) {
             fetchTasks && (await fetchTasks())
             createToast({
               title: "Success",
-              subtitle: "You have successfully updated the folder.",
+              subtitle: "You have successfully deleted the task.",
               expiration: 10000,
               type: "success",
             })
@@ -85,7 +85,7 @@ export default function TaskRow({ id, title, status, fetchTasks }: Props) {
         <div className="relative flex items-center justify-between">
           <p
             onClick={() => openModal({ modal: "task", id })}
-            className="cursor-pointer text-sm font-semibold text-blue-500 hover:text-blue-600"
+            className="cursor-pointer text-base font-semibold text-blue-500 hover:text-blue-600"
           >
             {title}
           </p>

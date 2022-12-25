@@ -41,7 +41,7 @@ export default function Toast({
       leaveFrom="opacity-100 translate-x-0"
       leaveTo="opacity-0 translate-x-64"
     >
-      <div className="relative mx-2 flex w-full overflow-hidden rounded-md bg-gray-50 shadow-md sm:mx-0 sm:w-96">
+      <div className="relative mx-2 flex w-full overflow-hidden rounded-md bg-gray-50 shadow-md dark:bg-[#333] sm:mx-0 sm:w-96">
         <HiX
           onClick={() => {
             removeToast(id || "")
