@@ -40,7 +40,7 @@ export default function NewFolderModal({ isOpen, fetchFolders }: Props) {
   })
   const { createToast } = useToast()
 
-  const { data, error, isLoading } = useSWR("fetchFolders", () =>
+  const { data, error, isLoading } = useSWR("/folders/my", () =>
     errorHandler(async () => await requestHelper.getMy<Folder>("folders"))
   )
 

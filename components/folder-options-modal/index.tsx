@@ -35,23 +35,21 @@ export default function FolderOptionsModal({ isOpen, fetchFolders }: Props) {
   const { errorHandler } = useErrorHandler()
   const { createToast } = useToast()
 
-  const { data, error, isLoading } = useSWR(
-    `folders/my/${currentModal.id}`,
-    () =>
-      errorHandler(
-        async () =>
-          await requestHelper.getSpecific<Folder>(
-            "folders",
-            currentModal.id as string
-          )
-      )
+  const { data, error, isLoading } = useSWR(`/folders/${currentModal.id}`, () =>
+    errorHandler(
+      async () =>
+        await requestHelper.getSpecific<Folder>(
+          "folders",
+          currentModal.id as string
+        )
+    )
   )
 
   const {
     data: foldersData,
     error: foldersError,
     isLoading: foldersIsLoading,
-  } = useSWR("folders", () =>
+  } = useSWR("folders/my", () =>
     errorHandler(async () => await requestHelper.getMy<Folder>("folders"))
   )
 

@@ -20,7 +20,7 @@ export default function Home() {
     error: folderError,
     isLoading: folderIsLoading,
     mutate: folderMutate,
-  } = useSWR("fetchFolders", () =>
+  } = useSWR("/folders/my", () =>
     errorHandler(async () => await requestHelper.getMy<Folder>("folders"))
   )
 
@@ -29,7 +29,7 @@ export default function Home() {
     error: taskError,
     isLoading: taskIsLoading,
     mutate: taskMutate,
-  } = useSWR("fetchTasks", () =>
+  } = useSWR("/tasks/my", () =>
     errorHandler(async () => await requestHelper.getMy<Task>("tasks"))
   )
 

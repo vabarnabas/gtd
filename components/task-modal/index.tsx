@@ -29,7 +29,7 @@ export default function TaskModal({ isOpen, fetchTasks }: Props) {
   const [isEdit, setIsEdit] = useState(false)
   const { createToast } = useToast()
 
-  const { data, error, isLoading } = useSWR(`tasks/${currentModal.id}`, () =>
+  const { data, error, isLoading } = useSWR(`/tasks/${currentModal.id}`, () =>
     errorHandler(
       async () =>
         await requestHelper.getSpecific<Task>(

@@ -67,12 +67,9 @@ export default function NewTaskModal({ isOpen, fetchTasks }: Props) {
   } as Task)
   const { createToast } = useToast()
 
-  const {
-    data: folderData,
-    error: folderError,
-    isLoading: folderIsLoading,
-  } = useSWR("fetchFolders", () =>
-    errorHandler(async () => await requestHelper.getMy<Folder>("folders"))
+  const { data: folderData, isLoading: folderIsLoading } = useSWR(
+    "/folders/my",
+    () => errorHandler(async () => await requestHelper.getMy<Folder>("folders"))
   )
 
   const { data: taskData, isLoading: taskIsLoading } = useSWR(
