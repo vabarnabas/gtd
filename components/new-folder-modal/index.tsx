@@ -37,6 +37,7 @@ export default function NewFolderModal({ isOpen, fetchFolders }: Props) {
     createdAt: new Date(Date.now()),
     userId: "",
     parentId: null,
+    sharedWith: [],
   })
   const { createToast } = useToast()
 
