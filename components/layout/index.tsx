@@ -85,17 +85,23 @@ export default function Layout({
                 FolderHelper.findFolder(folders, id as string).userId ===
                   user.id ? (
                   <div className="flex gap-x-3">
-                    <p
-                      onClick={() => {
-                        id && openModal({ modal: "share-folder", id })
-                      }}
-                      className={clsx("ml-auto w-min cursor-pointer text-sm", {
-                        "text-blue-500 hover:text-blue-600 hover:underline": id,
-                        "cursor-not-allowed text-gray-400": !id,
-                      })}
-                    >
-                      Share
-                    </p>
+                    {FolderHelper.isTopLevel(folders, id as string) ? (
+                      <p
+                        onClick={() => {
+                          id && openModal({ modal: "share-folder", id })
+                        }}
+                        className={clsx(
+                          "ml-auto w-min cursor-pointer text-sm",
+                          {
+                            "text-blue-500 hover:text-blue-600 hover:underline":
+                              id,
+                            "cursor-not-allowed text-gray-400": !id,
+                          }
+                        )}
+                      >
+                        Share
+                      </p>
+                    ) : null}
                     <p
                       onClick={() => {
                         id && openModal({ modal: "folder-options", id })
