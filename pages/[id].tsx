@@ -41,6 +41,8 @@ export default function Home() {
 
   const isLoading = folderIsLoading || taskIsLoading
 
+  console.log(folderData && id && FolderHelper.isIn(folderData, id))
+
   return (
     <Layout
       fetchFolders={folderMutate}
@@ -51,7 +53,7 @@ export default function Home() {
       <>
         <Head>
           <title>{`NoteBox${
-            folderData && id
+            folderData && id && FolderHelper.isIn(folderData, id)
               ? ` - ${FolderHelper.findFolder(folderData, id as string).title}`
               : ""
           }`}</title>

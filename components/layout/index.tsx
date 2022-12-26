@@ -1,6 +1,7 @@
 import clsx from "clsx"
 import Head from "next/head"
 import { useRouter } from "next/router"
+import { useEffect } from "react"
 
 import { FolderHelper } from "../../helpers/FolderHelper"
 import useModalStore from "../../store/modal.store"
@@ -40,6 +41,12 @@ export default function Layout({
   const currentModal = useModalStore((state) => state.currentModal)
   const openModal = useModalStore((state) => state.openModal)
 
+  useEffect(() => {
+    if (folders && id && !FolderHelper.isIn(folders, id)) {
+      router.push("/")
+    }
+  }, [folders, id, router])
+
   return (
     <div className="h-screen w-screen select-none text-gray-800 dark:bg-[#222] dark:text-gray-50">
       <Head>
@@ -49,7 +56,9 @@ export default function Layout({
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Navbar />
-      {folders && folders.length !== 0 ? (
+      {folders &&
+      folders.length !== 0 &&
+      (id ? FolderHelper.isIn(folders, id as string) : true) ? (
         <>
           {folders && folders.length !== 0 ? (
             <div className="fixed inset-x-0 top-12 flex h-12 items-center px-6">
