@@ -85,14 +85,14 @@ export default function TaskRow({ id, title, status, fetchTasks }: Props) {
   return (
     <div className="relative h-max w-full bg-inherit px-4 py-2 first:rounded-t-lg">
       <Menu as="div" className="">
-        <div className="relative flex items-center justify-between">
+        <div className="relative flex items-center justify-between gap-x-5">
           <p
             onClick={() => openModal({ modal: "task", id })}
             className="cursor-pointer text-base font-semibold text-blue-500 hover:text-blue-600"
           >
             {title}
           </p>
-          <div className="flex flex-wrap items-center gap-x-2 gap-y-2 text-sm">
+          <div className="flex items-center gap-x-2 gap-y-2 text-sm">
             <div className="flex items-center gap-x-3">
               <Listbox
                 value={selected}
